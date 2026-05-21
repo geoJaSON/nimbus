@@ -1,0 +1,1666 @@
+[
+  {
+    "id": "AWPA2",
+    "name": "Anchorage",
+    "lat": 61.15,
+    "lon": -149.78,
+    "elevation_m": 97,
+    "stationType": "Profiler"
+  },
+  {
+    "id": "HWPA2",
+    "name": "Homer",
+    "lat": 59.65,
+    "lon": -151.46,
+    "elevation_m": 8,
+    "stationType": "Profiler"
+  },
+  {
+    "id": "KABR",
+    "name": "Aberdeen",
+    "lat": 45.4558,
+    "lon": -98.413,
+    "elevation_m": 397,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KABX",
+    "name": "Albuquerque",
+    "lat": 35.1497,
+    "lon": -106.8239,
+    "elevation_m": 1789,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KAKQ",
+    "name": "Norfolk",
+    "lat": 36.9839,
+    "lon": -77.0075,
+    "elevation_m": 48,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KAMA",
+    "name": "Amarillo",
+    "lat": 35.2333,
+    "lon": -101.7093,
+    "elevation_m": 1104,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KAMX",
+    "name": "Miami",
+    "lat": 25.6105,
+    "lon": -80.413,
+    "elevation_m": 4,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KAPX",
+    "name": "NCL Michigan",
+    "lat": 44.9063,
+    "lon": -84.7195,
+    "elevation_m": 446,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KARX",
+    "name": "La Crosse",
+    "lat": 43.8228,
+    "lon": -91.1911,
+    "elevation_m": 389,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KATX",
+    "name": "Seattle",
+    "lat": 48.1946,
+    "lon": -122.4957,
+    "elevation_m": 161,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBBX",
+    "name": "Beale AFB",
+    "lat": 39.4961,
+    "lon": -121.6316,
+    "elevation_m": 53,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBGM",
+    "name": "Binghamton",
+    "lat": 42.1997,
+    "lon": -75.9847,
+    "elevation_m": 490,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBHX",
+    "name": "Eureka (Bunker Hill)",
+    "lat": 40.4983,
+    "lon": -124.2922,
+    "elevation_m": 732,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBIS",
+    "name": "Bismarck",
+    "lat": 46.7708,
+    "lon": -100.7603,
+    "elevation_m": 505,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBLX",
+    "name": "Billings",
+    "lat": 45.8538,
+    "lon": -108.6068,
+    "elevation_m": 1109,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBMX",
+    "name": "Birmingham",
+    "lat": 33.1719,
+    "lon": -86.7697,
+    "elevation_m": 197,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBOX",
+    "name": "Boston",
+    "lat": 41.9558,
+    "lon": -71.1369,
+    "elevation_m": 36,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBRO",
+    "name": "Brownsville",
+    "lat": 25.9155,
+    "lon": -97.4186,
+    "elevation_m": 7,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBUF",
+    "name": "Buffalo",
+    "lat": 42.9486,
+    "lon": -78.7369,
+    "elevation_m": 211,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KBYX",
+    "name": "Key West",
+    "lat": 24.5969,
+    "lon": -81.7033,
+    "elevation_m": 2,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KCAE",
+    "name": "Columbia",
+    "lat": 33.9486,
+    "lon": -81.1186,
+    "elevation_m": 70,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KCBW",
+    "name": "Caribou",
+    "lat": 46.0392,
+    "lon": -67.8064,
+    "elevation_m": 227,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KCBX",
+    "name": "Boise",
+    "lat": 43.4902,
+    "lon": -116.236,
+    "elevation_m": 942,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KCCX",
+    "name": "State College",
+    "lat": 40.9231,
+    "lon": -78.0039,
+    "elevation_m": 733,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KCLE",
+    "name": "Cleveland",
+    "lat": 41.413,
+    "lon": -81.86,
+    "elevation_m": 233,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KCLX",
+    "name": "Charleston,SC",
+    "lat": 32.6555,
+    "lon": -81.0422,
+    "elevation_m": 35,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KCRP",
+    "name": "Corpus Christi",
+    "lat": 27.7839,
+    "lon": -97.5108,
+    "elevation_m": 14,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KCXX",
+    "name": "Burlington",
+    "lat": 44.5111,
+    "lon": -73.1664,
+    "elevation_m": 97,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KCYS",
+    "name": "Cheyenne",
+    "lat": 41.1519,
+    "lon": -104.8061,
+    "elevation_m": 1868,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDAX",
+    "name": "Sacramento",
+    "lat": 38.5011,
+    "lon": -121.6778,
+    "elevation_m": 9,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDDC",
+    "name": "Dodge City",
+    "lat": 37.7608,
+    "lon": -99.9689,
+    "elevation_m": 789,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDFX",
+    "name": "Laughlin AFB",
+    "lat": 29.2725,
+    "lon": -100.2803,
+    "elevation_m": 345,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDGX",
+    "name": "Jackson/Brandon,MS",
+    "lat": 32.28,
+    "lon": -89.9844,
+    "elevation_m": 151,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDIX",
+    "name": "Philadelphia",
+    "lat": 39.9469,
+    "lon": -74.4107,
+    "elevation_m": 45,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDLH",
+    "name": "Duluth",
+    "lat": 46.8369,
+    "lon": -92.2097,
+    "elevation_m": 435,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDMX",
+    "name": "Des Moines",
+    "lat": 41.7311,
+    "lon": -93.7228,
+    "elevation_m": 299,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDOX",
+    "name": "Dover AFB",
+    "lat": 38.8255,
+    "lon": -75.44,
+    "elevation_m": 15,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDTX",
+    "name": "Detroit",
+    "lat": 42.7,
+    "lon": -83.4717,
+    "elevation_m": 336,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDVN",
+    "name": "Quad Cities",
+    "lat": 41.6117,
+    "lon": -90.5808,
+    "elevation_m": 230,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KDYX",
+    "name": "Dyess AFB",
+    "lat": 32.5383,
+    "lon": -99.2542,
+    "elevation_m": 462,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KEAX",
+    "name": "Pleasant Hill",
+    "lat": 38.8102,
+    "lon": -94.2645,
+    "elevation_m": 303,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KEMX",
+    "name": "Tucson",
+    "lat": 31.8936,
+    "lon": -110.6303,
+    "elevation_m": 1586,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KENX",
+    "name": "Albany",
+    "lat": 42.5866,
+    "lon": -74.0641,
+    "elevation_m": 565,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KEOX",
+    "name": "Ft Rucker",
+    "lat": 31.4606,
+    "lon": -85.4594,
+    "elevation_m": 144,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KEPZ",
+    "name": "El Paso",
+    "lat": 31.873,
+    "lon": -106.698,
+    "elevation_m": 1251,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KESX",
+    "name": "Las Vegas",
+    "lat": 35.7011,
+    "lon": -114.8914,
+    "elevation_m": 1483,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KEVX",
+    "name": "Eglin Afb",
+    "lat": 30.565,
+    "lon": -85.9217,
+    "elevation_m": 43,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KEWX",
+    "name": "Austin/San Antonio",
+    "lat": 29.704,
+    "lon": -98.0286,
+    "elevation_m": 204,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KEYX",
+    "name": "Edwards AFB",
+    "lat": 35.0978,
+    "lon": -117.5607,
+    "elevation_m": 846,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KFCX",
+    "name": "Roanoke",
+    "lat": 37.0242,
+    "lon": -80.2742,
+    "elevation_m": 874,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KFDR",
+    "name": "Altus AFB",
+    "lat": 34.3622,
+    "lon": -98.9767,
+    "elevation_m": 386,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KFDX",
+    "name": "Cannon AFB",
+    "lat": 34.6342,
+    "lon": -103.6189,
+    "elevation_m": 1417,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KFFC",
+    "name": "Atlanta",
+    "lat": 33.3633,
+    "lon": -84.5658,
+    "elevation_m": 262,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KFSD",
+    "name": "Sioux Falls",
+    "lat": 43.5878,
+    "lon": -96.7289,
+    "elevation_m": 436,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KFSX",
+    "name": "Flagstaff",
+    "lat": 34.5743,
+    "lon": -111.1984,
+    "elevation_m": 2261,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KFTG",
+    "name": "Denver",
+    "lat": 39.7866,
+    "lon": -104.5458,
+    "elevation_m": 1675,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KFWS",
+    "name": "Dallas/Ft Worth",
+    "lat": 32.5728,
+    "lon": -97.3031,
+    "elevation_m": 212,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KGGW",
+    "name": "Glasgow",
+    "lat": 48.2064,
+    "lon": -106.6247,
+    "elevation_m": 702,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KGJX",
+    "name": "Grand Junction",
+    "lat": 39.0622,
+    "lon": -108.2138,
+    "elevation_m": 3059,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KGLD",
+    "name": "Goodland",
+    "lat": 39.3669,
+    "lon": -101.7003,
+    "elevation_m": 1113,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KGRB",
+    "name": "Green Bay",
+    "lat": 44.4986,
+    "lon": -88.1111,
+    "elevation_m": 216,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KGRK",
+    "name": "Ft Hood",
+    "lat": 30.7217,
+    "lon": -97.3828,
+    "elevation_m": 164,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KGRR",
+    "name": "Grand Rapids",
+    "lat": 42.8939,
+    "lon": -85.5449,
+    "elevation_m": 237,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KGSP",
+    "name": "Greer",
+    "lat": 34.8833,
+    "lon": -82.2198,
+    "elevation_m": 291,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KGWX",
+    "name": "Columbus AFB",
+    "lat": 33.8969,
+    "lon": -88.3292,
+    "elevation_m": 155,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KGYX",
+    "name": "Portland,ME",
+    "lat": 43.8913,
+    "lon": -70.2564,
+    "elevation_m": 125,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KHDC",
+    "name": "Hammond",
+    "lat": 30.5196,
+    "lon": -90.4074,
+    "elevation_m": 43,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KHDX",
+    "name": "Holloman AFB",
+    "lat": 33.077,
+    "lon": -106.12,
+    "elevation_m": 1287,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KHGX",
+    "name": "Houston",
+    "lat": 29.4719,
+    "lon": -95.0789,
+    "elevation_m": 5,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KHNX",
+    "name": "San Joaquin Valley",
+    "lat": 36.3142,
+    "lon": -119.6321,
+    "elevation_m": 74,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KHPX",
+    "name": "Ft Campbell",
+    "lat": 36.7367,
+    "lon": -87.285,
+    "elevation_m": 172,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KHTX",
+    "name": "Northeast Alabama",
+    "lat": 34.9305,
+    "lon": -86.0836,
+    "elevation_m": 537,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KICT",
+    "name": "Wichita",
+    "lat": 37.6544,
+    "lon": -97.443,
+    "elevation_m": 407,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KICX",
+    "name": "Cedar City",
+    "lat": 37.591,
+    "lon": -112.8622,
+    "elevation_m": 3244,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KILN",
+    "name": "Cincinnati",
+    "lat": 39.4203,
+    "lon": -83.8217,
+    "elevation_m": 322,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KILX",
+    "name": "Lincoln",
+    "lat": 40.1505,
+    "lon": -89.3368,
+    "elevation_m": 188,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KIND",
+    "name": "Indianapolis",
+    "lat": 39.7075,
+    "lon": -86.2803,
+    "elevation_m": 241,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KINX",
+    "name": "Tulsa",
+    "lat": 36.175,
+    "lon": -95.5641,
+    "elevation_m": 204,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KIWA",
+    "name": "Phoenix",
+    "lat": 33.2892,
+    "lon": -111.67,
+    "elevation_m": 415,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KIWX",
+    "name": "Northern Indiana",
+    "lat": 41.3586,
+    "lon": -85.7,
+    "elevation_m": 292,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KJAX",
+    "name": "Jacksonville",
+    "lat": 30.4846,
+    "lon": -81.7019,
+    "elevation_m": 19,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KJGX",
+    "name": "Robins AFB",
+    "lat": 32.675,
+    "lon": -83.3511,
+    "elevation_m": 159,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KJKL",
+    "name": "Jackson,KY",
+    "lat": 37.5908,
+    "lon": -83.3131,
+    "elevation_m": 416,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLBB",
+    "name": "Lubbock",
+    "lat": 33.6541,
+    "lon": -101.8142,
+    "elevation_m": 1005,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLCH",
+    "name": "Lake Charles",
+    "lat": 30.1253,
+    "lon": -93.2159,
+    "elevation_m": 17,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLGX",
+    "name": "Langley Hill",
+    "lat": 47.1169,
+    "lon": -124.1066,
+    "elevation_m": 77,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLNX",
+    "name": "North Platte",
+    "lat": 41.9579,
+    "lon": -100.5762,
+    "elevation_m": 919,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLOT",
+    "name": "Chicago",
+    "lat": 41.6044,
+    "lon": -88.0844,
+    "elevation_m": 202,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLRX",
+    "name": "Elko",
+    "lat": 40.7397,
+    "lon": -116.8028,
+    "elevation_m": 2067,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLSX",
+    "name": "St Louis",
+    "lat": 38.6989,
+    "lon": -90.6828,
+    "elevation_m": 185,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLTX",
+    "name": "Wilmington",
+    "lat": 33.9892,
+    "lon": -78.4292,
+    "elevation_m": 20,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLVX",
+    "name": "Louisville",
+    "lat": 37.9753,
+    "lon": -85.9439,
+    "elevation_m": 219,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLWX",
+    "name": "Sterling",
+    "lat": 38.9761,
+    "lon": -77.4875,
+    "elevation_m": 89,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KLZK",
+    "name": "Little Rock",
+    "lat": 34.8364,
+    "lon": -92.2619,
+    "elevation_m": 173,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMAF",
+    "name": "Midland/Odessa",
+    "lat": 31.9435,
+    "lon": -102.1892,
+    "elevation_m": 883,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMAX",
+    "name": "Medford",
+    "lat": 42.0811,
+    "lon": -122.7173,
+    "elevation_m": 2290,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMBX",
+    "name": "Minot AFB",
+    "lat": 48.3925,
+    "lon": -100.8644,
+    "elevation_m": 455,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMHX",
+    "name": "Morehead City",
+    "lat": 34.7758,
+    "lon": -76.8764,
+    "elevation_m": 9,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMKX",
+    "name": "Milwaukee",
+    "lat": 42.9678,
+    "lon": -88.5506,
+    "elevation_m": 292,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMLB",
+    "name": "Melbourne",
+    "lat": 28.1131,
+    "lon": -80.6544,
+    "elevation_m": 11,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMOB",
+    "name": "Mobile",
+    "lat": 30.6794,
+    "lon": -88.2397,
+    "elevation_m": 63,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMPX",
+    "name": "Minneapolis",
+    "lat": 44.8489,
+    "lon": -93.5655,
+    "elevation_m": 301,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMQT",
+    "name": "Marquette",
+    "lat": 46.5311,
+    "lon": -87.5483,
+    "elevation_m": 430,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMRX",
+    "name": "Knoxville",
+    "lat": 36.1683,
+    "lon": -83.4019,
+    "elevation_m": 408,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMSX",
+    "name": "Missoula",
+    "lat": 47.0411,
+    "lon": -113.9861,
+    "elevation_m": 2417,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMTX",
+    "name": "Salt Lake City",
+    "lat": 41.2628,
+    "lon": -112.4478,
+    "elevation_m": 1975,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMUX",
+    "name": "San Francisco",
+    "lat": 37.1552,
+    "lon": -121.8984,
+    "elevation_m": 1057,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMVX",
+    "name": "Fargo/Grand Forks",
+    "lat": 47.5281,
+    "lon": -97.325,
+    "elevation_m": 301,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KMXX",
+    "name": "Maxwell AFB",
+    "lat": 32.5366,
+    "lon": -85.7897,
+    "elevation_m": 136,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KNKX",
+    "name": "San Diego",
+    "lat": 32.9189,
+    "lon": -117.0419,
+    "elevation_m": 291,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KNQA",
+    "name": "Memphis",
+    "lat": 35.3447,
+    "lon": -89.8733,
+    "elevation_m": 103,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KOAX",
+    "name": "Omaha",
+    "lat": 41.3203,
+    "lon": -96.3668,
+    "elevation_m": 350,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KOHX",
+    "name": "Nashville",
+    "lat": 36.2472,
+    "lon": -86.5625,
+    "elevation_m": 176,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KOKX",
+    "name": "Brookhaven",
+    "lat": 40.8655,
+    "lon": -72.8639,
+    "elevation_m": 26,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KOTX",
+    "name": "Spokane",
+    "lat": 47.6805,
+    "lon": -117.6258,
+    "elevation_m": 727,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KPAH",
+    "name": "Paducah",
+    "lat": 37.0683,
+    "lon": -88.7719,
+    "elevation_m": 119,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KPBZ",
+    "name": "Pittsburgh",
+    "lat": 40.5317,
+    "lon": -80.2179,
+    "elevation_m": 361,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KPDT",
+    "name": "Pendleton",
+    "lat": 45.6906,
+    "lon": -118.8529,
+    "elevation_m": 462,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KPOE",
+    "name": "Ft Polk",
+    "lat": 31.1553,
+    "lon": -92.9758,
+    "elevation_m": 124,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KPUX",
+    "name": "Pueblo",
+    "lat": 38.4594,
+    "lon": -104.1814,
+    "elevation_m": 1615,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KRAX",
+    "name": "Raleigh/Durham",
+    "lat": 35.6653,
+    "lon": -78.49,
+    "elevation_m": 106,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KRGX",
+    "name": "Reno",
+    "lat": 39.754,
+    "lon": -119.462,
+    "elevation_m": 2530,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KRIW",
+    "name": "Riverton/Lander",
+    "lat": 43.0661,
+    "lon": -108.4773,
+    "elevation_m": 1697,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KRLX",
+    "name": "Charleston,WV",
+    "lat": 38.3111,
+    "lon": -81.7228,
+    "elevation_m": 335,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KRTX",
+    "name": "Portland,OR",
+    "lat": 45.715,
+    "lon": -122.965,
+    "elevation_m": 492,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KSFX",
+    "name": "Pocatello",
+    "lat": 43.1056,
+    "lon": -112.6861,
+    "elevation_m": 1364,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KSGF",
+    "name": "Springfield",
+    "lat": 37.2353,
+    "lon": -93.4003,
+    "elevation_m": 390,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KSHV",
+    "name": "Shreveport",
+    "lat": 32.4508,
+    "lon": -93.8412,
+    "elevation_m": 83,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KSJT",
+    "name": "San Angelo",
+    "lat": 31.3711,
+    "lon": -100.4922,
+    "elevation_m": 576,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KSOX",
+    "name": "Santa Ana Mts",
+    "lat": 33.8177,
+    "lon": -117.636,
+    "elevation_m": 927,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KSRX",
+    "name": "Western Arkansas",
+    "lat": 35.2904,
+    "lon": -94.3619,
+    "elevation_m": 200,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KTBW",
+    "name": "Tampa",
+    "lat": 27.7053,
+    "lon": -82.4019,
+    "elevation_m": 12,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KTFX",
+    "name": "Great Falls",
+    "lat": 47.4597,
+    "lon": -111.3853,
+    "elevation_m": 1140,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KTLH",
+    "name": "Tallahassee",
+    "lat": 30.3975,
+    "lon": -84.3289,
+    "elevation_m": 19,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KTLX",
+    "name": "Norman",
+    "lat": 35.3331,
+    "lon": -97.2777,
+    "elevation_m": 370,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KTWX",
+    "name": "Topeka",
+    "lat": 38.9969,
+    "lon": -96.2325,
+    "elevation_m": 417,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KTYX",
+    "name": "Ft Drum",
+    "lat": 43.7558,
+    "lon": -75.68,
+    "elevation_m": 563,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KUDX",
+    "name": "Rapid City",
+    "lat": 44.1247,
+    "lon": -102.83,
+    "elevation_m": 939,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KUEX",
+    "name": "Grand Island",
+    "lat": 40.3208,
+    "lon": -98.4419,
+    "elevation_m": 602,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KVAX",
+    "name": "Moody AFB",
+    "lat": 30.8903,
+    "lon": -83.0018,
+    "elevation_m": 66,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KVBX",
+    "name": "Vandenberg AFB",
+    "lat": 34.8385,
+    "lon": -120.3979,
+    "elevation_m": 383,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KVNX",
+    "name": "Vance AFB",
+    "lat": 36.7408,
+    "lon": -98.1275,
+    "elevation_m": 369,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KVTX",
+    "name": "Los Angeles",
+    "lat": 34.4117,
+    "lon": -119.1786,
+    "elevation_m": 831,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KVWX",
+    "name": "Evansville,IN",
+    "lat": 38.2602,
+    "lon": -87.7245,
+    "elevation_m": 156,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "KYUX",
+    "name": "Yuma",
+    "lat": 32.4953,
+    "lon": -114.6567,
+    "elevation_m": 53,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PABC",
+    "name": "Bethel",
+    "lat": 60.7919,
+    "lon": -161.8764,
+    "elevation_m": 49,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PACG",
+    "name": "Sitka",
+    "lat": 56.8528,
+    "lon": -135.5291,
+    "elevation_m": 63,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PAEC",
+    "name": "Nome",
+    "lat": 64.5114,
+    "lon": -165.295,
+    "elevation_m": 18,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PAHG",
+    "name": "Kenai",
+    "lat": 60.7259,
+    "lon": -151.3514,
+    "elevation_m": 74,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PAIH",
+    "name": "Middleton Island",
+    "lat": 59.4619,
+    "lon": -146.3011,
+    "elevation_m": 20,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PAKC",
+    "name": "King Salmon",
+    "lat": 58.6794,
+    "lon": -156.6294,
+    "elevation_m": 19,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PAPD",
+    "name": "Fairbanks Faa",
+    "lat": 65.0351,
+    "lon": -147.5014,
+    "elevation_m": 790,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PGUA",
+    "name": "Andersen AFB",
+    "lat": 13.4558,
+    "lon": 144.8111,
+    "elevation_m": 83,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PHKI",
+    "name": "South Kauai",
+    "lat": 21.8939,
+    "lon": -159.5525,
+    "elevation_m": 69,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PHKM",
+    "name": "Kamuela/Kohala Apt",
+    "lat": 20.1253,
+    "lon": -155.7778,
+    "elevation_m": 1174,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PHMO",
+    "name": "Molokai",
+    "lat": 21.1328,
+    "lon": -157.1803,
+    "elevation_m": 415,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "PHWA",
+    "name": "South Shore",
+    "lat": 19.095,
+    "lon": -155.5689,
+    "elevation_m": 421,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "RKJK",
+    "name": "Kunsan AB",
+    "lat": 35.9242,
+    "lon": 126.6222,
+    "elevation_m": 24,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "RKSG",
+    "name": "Camp Humphreys",
+    "lat": 37.2076,
+    "lon": 127.2856,
+    "elevation_m": 439,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "ROCO2",
+    "name": "Norman",
+    "lat": 35.23,
+    "lon": -97.45,
+    "elevation_m": 363,
+    "stationType": "Profiler"
+  },
+  {
+    "id": "RODN",
+    "name": "Kadena AB",
+    "lat": 26.3019,
+    "lon": 127.9097,
+    "elevation_m": 91,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "TADW",
+    "name": "Andrews Air Force Base",
+    "lat": 38.695,
+    "lon": -76.845,
+    "elevation_m": 105,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TATL",
+    "name": "Atlanta",
+    "lat": 33.647,
+    "lon": -84.262,
+    "elevation_m": 328,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TBNA",
+    "name": "Nashville",
+    "lat": 35.98,
+    "lon": -86.662,
+    "elevation_m": 249,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TBOS",
+    "name": "Boston",
+    "lat": 42.158,
+    "lon": -70.933,
+    "elevation_m": 80,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TBWI",
+    "name": "Baltimore/Wash",
+    "lat": 39.09,
+    "lon": -76.63,
+    "elevation_m": 91,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TCLT",
+    "name": "Charlotte",
+    "lat": 35.337,
+    "lon": -80.885,
+    "elevation_m": 265,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TCMH",
+    "name": "Columbus,OH",
+    "lat": 40.006,
+    "lon": -82.715,
+    "elevation_m": 350,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TCVG",
+    "name": "Covington",
+    "lat": 38.898,
+    "lon": -84.58,
+    "elevation_m": 321,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TDAL",
+    "name": "Dallas Love Field",
+    "lat": 32.926,
+    "lon": -96.968,
+    "elevation_m": 190,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TDAY",
+    "name": "Dayton",
+    "lat": 40.022,
+    "lon": -84.123,
+    "elevation_m": 311,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TDCA",
+    "name": "Washington National",
+    "lat": 38.759,
+    "lon": -76.962,
+    "elevation_m": 105,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TDEN",
+    "name": "Denver",
+    "lat": 39.728,
+    "lon": -104.526,
+    "elevation_m": 1738,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TDFW",
+    "name": "Dallas/Ft. Worth",
+    "lat": 33.065,
+    "lon": -96.918,
+    "elevation_m": 178,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TDTW",
+    "name": "Detroit",
+    "lat": 42.111,
+    "lon": -83.515,
+    "elevation_m": 235,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TEWR",
+    "name": "Newark",
+    "lat": 40.593,
+    "lon": -74.27,
+    "elevation_m": 41,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TFLL",
+    "name": "Fort Lauderdale",
+    "lat": 26.143,
+    "lon": -80.344,
+    "elevation_m": 37,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "THOU",
+    "name": "Houston Hobby",
+    "lat": 29.516,
+    "lon": -95.242,
+    "elevation_m": 36,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TIAD",
+    "name": "Dulles",
+    "lat": 39.084,
+    "lon": -77.529,
+    "elevation_m": 144,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TIAH",
+    "name": "Houston International",
+    "lat": 30.065,
+    "lon": -95.567,
+    "elevation_m": 77,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TICH",
+    "name": "Witchita",
+    "lat": 37.507,
+    "lon": -97.437,
+    "elevation_m": 412,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TIDS",
+    "name": "Indianapolis",
+    "lat": 39.637,
+    "lon": -86.436,
+    "elevation_m": 258,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TJFK",
+    "name": "New York City",
+    "lat": 40.589,
+    "lon": -73.881,
+    "elevation_m": 34,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TJUA",
+    "name": "San Juan",
+    "lat": 18.1157,
+    "lon": -66.0782,
+    "elevation_m": 867,
+    "stationType": "WSR-88D"
+  },
+  {
+    "id": "TLAS",
+    "name": "Las Vegas",
+    "lat": 36.144,
+    "lon": -115.007,
+    "elevation_m": 627,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TLKA2",
+    "name": "Talkeetna",
+    "lat": 62.31,
+    "lon": -150.42,
+    "elevation_m": 151,
+    "stationType": "Profiler"
+  },
+  {
+    "id": "TLVE",
+    "name": "Cleveland,OH",
+    "lat": 41.29,
+    "lon": -82.008,
+    "elevation_m": 284,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TMCI",
+    "name": "Kansas City",
+    "lat": 39.498,
+    "lon": -94.742,
+    "elevation_m": 332,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TMCO",
+    "name": "Orlando International",
+    "lat": 28.344,
+    "lon": -81.326,
+    "elevation_m": 52,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TMDW",
+    "name": "Chicago Midway",
+    "lat": 41.651,
+    "lon": -87.73,
+    "elevation_m": 233,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TMEM",
+    "name": "Memphis",
+    "lat": 34.896,
+    "lon": -89.993,
+    "elevation_m": 147,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TMIA",
+    "name": "Miami",
+    "lat": 25.758,
+    "lon": -80.491,
+    "elevation_m": 38,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TMKE",
+    "name": "Milwaukee",
+    "lat": 42.819,
+    "lon": -88.046,
+    "elevation_m": 284,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TMSP",
+    "name": "Minneapolis",
+    "lat": 44.871,
+    "lon": -92.933,
+    "elevation_m": 342,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TMSY",
+    "name": "New Orleans",
+    "lat": 30.022,
+    "lon": -90.403,
+    "elevation_m": 30,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TOKC",
+    "name": "Oklahoma City",
+    "lat": 35.276,
+    "lon": -97.51,
+    "elevation_m": 399,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TORD",
+    "name": "Chicago O'Hare",
+    "lat": 41.797,
+    "lon": -87.858,
+    "elevation_m": 227,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TPBI",
+    "name": "West Palm Beach",
+    "lat": 26.688,
+    "lon": -80.273,
+    "elevation_m": 41,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TPHL",
+    "name": "Philadelphia",
+    "lat": 39.949,
+    "lon": -75.069,
+    "elevation_m": 47,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TPHX",
+    "name": "Phoenix",
+    "lat": 33.421,
+    "lon": -112.163,
+    "elevation_m": 332,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TPIT",
+    "name": "Pittsburgh",
+    "lat": 40.501,
+    "lon": -80.486,
+    "elevation_m": 422,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TRDU",
+    "name": "Raleigh Durham",
+    "lat": 36.002,
+    "lon": -78.697,
+    "elevation_m": 157,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TSDF",
+    "name": "Louisville,KY",
+    "lat": 38.046,
+    "lon": -85.61,
+    "elevation_m": 223,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TSJU",
+    "name": "San Juan",
+    "lat": 18.474,
+    "lon": -66.179,
+    "elevation_m": 48,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TSLC",
+    "name": "Salt Lake City",
+    "lat": 40.967,
+    "lon": -111.93,
+    "elevation_m": 1309,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TSTL",
+    "name": "St. Louis",
+    "lat": 38.805,
+    "lon": -90.489,
+    "elevation_m": 197,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TTPA",
+    "name": "Tampa Bay",
+    "lat": 27.86,
+    "lon": -82.518,
+    "elevation_m": 28,
+    "stationType": "TDWR"
+  },
+  {
+    "id": "TTUL",
+    "name": "Tulsa",
+    "lat": 36.071,
+    "lon": -95.827,
+    "elevation_m": 251,
+    "stationType": "TDWR"
+  }
+]

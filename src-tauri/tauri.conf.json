@@ -1,0 +1,43 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Nimbus",
+  "version": "0.1.0",
+  "identifier": "com.nimbus.radar",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "NIMBUS",
+        "width": 1400,
+        "height": 900,
+        "minWidth": 1024,
+        "minHeight": 700,
+        "resizable": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Utility",
+    "shortDescription": "Retro terminal NEXRAD weather radar",
+    "longDescription": "NIMBUS is a retro CRT-styled NEXRAD radar viewer. Live radar loop, NWS alerts, SPC Day 1 outlook, mesoscale discussions, local storm reports, and storm cell tracking with motion vectors.",
+    "copyright": "Copyright © 2026 Jason Jordan",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}
