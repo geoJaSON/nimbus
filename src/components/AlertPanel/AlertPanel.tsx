@@ -1,6 +1,7 @@
-import { useState } from 'react';
 import { useAlertStore } from '../../store/alertStore';
-import { alertColor, isWatch, isTornado } from '../../lib/alertParsing';
+import { useUIStore, type AlertFilter } from '../../store/uiStore';
+import { alertColor, isWatch, isTornado, isSevere } from '../../lib/alertParsing';
+import { polygonBounds } from '../../lib/geoBounds';
 import { TerminalPanel } from '../shared/TerminalPanel';
 import type { WeatherAlert } from '../../types';
 
@@ -8,24 +9,57 @@ interface AlertPanelProps {
   onClose: () => void;
 }
 
+const FILTERS: AlertFilter[] = ['SEVERE', 'WARN', 'WATCH'];
+
+const FILTER_TITLES: Record<AlertFilter, string> = {
+  SEVERE: 'SEVERE',
+  WARN: 'WARNINGS',
+  WATCH: 'WATCHES',
+};
+
+function matchesFilter(alert: WeatherAlert, filter: AlertFilter): boolean {
+  if (filter === 'WATCH') return isWatch(alert.event);
+  if (filter === 'SEVERE') return isSevere(alert.event);
+  // WARN = any non-watch that isn't already in SEVERE
+  return !isWatch(alert.event) && !isSevere(alert.event);
+}
+
 export function AlertPanel({ onClose }: AlertPanelProps) {
   const alerts = useAlertStore((s) => s.alerts);
   const selectedAlertId = useAlertStore((s) => s.selectedAlertId);
   const selectAlert = useAlertStore((s) => s.selectAlert);
   const lastFetched = useAlertStore((s) => s.lastFetched);
+  const filter = useUIStore((s) => s.alertFilter);
+  const setFilter = useUIStore((s) => s.setAlertFilter);
+  const focusMap = useUIStore((s) => s.focusMap);
 
   const selectedAlert = alerts.find((a) => a.id === selectedAlertId) ?? null;
+  const filtered = alerts.filter((a) => matchesFilter(a, filter));
+
+  const handleSelect = (alert: WeatherAlert) => {
+    selectAlert(alert.id);
+    if (alert.polygon) {
+      const bounds = polygonBounds(alert.polygon);
+      if (bounds) focusMap({ key: `alert-${alert.id}-${Date.now()}`, kind: 'bounds', bounds });
+    }
+  };
 
   return (
     <TerminalPanel
-      title={`ALERTS (${alerts.length})`}
+      title={`${FILTER_TITLES[filter]} (${filtered.length})`}
       onClose={onClose}
       width="w-80"
     >
       {selectedAlert ? (
         <AlertDetail alert={selectedAlert} onBack={() => selectAlert(null)} />
       ) : (
-        <AlertList alerts={alerts} onSelect={(id) => selectAlert(id)} lastFetched={lastFetched} />
+        <AlertList
+          alerts={filtered}
+          filter={filter}
+          onFilter={setFilter}
+          onSelect={handleSelect}
+          lastFetched={lastFetched}
+        />
       )}
     </TerminalPanel>
   );
@@ -35,32 +69,28 @@ export function AlertPanel({ onClose }: AlertPanelProps) {
 
 function AlertList({
   alerts,
+  filter,
+  onFilter,
   onSelect,
   lastFetched,
 }: {
   alerts: WeatherAlert[];
-  onSelect: (id: string) => void;
+  filter: AlertFilter;
+  onFilter: (f: AlertFilter) => void;
+  onSelect: (alert: WeatherAlert) => void;
   lastFetched: Date | null;
 }) {
-  const [filter, setFilter] = useState<'all' | 'warning' | 'watch'>('all');
-
-  const filtered = alerts.filter((a) => {
-    if (filter === 'warning') return !isWatch(a.event);
-    if (filter === 'watch') return isWatch(a.event);
-    return true;
-  });
-
   return (
     <div className="flex flex-col h-full">
       {/* Filter tabs */}
       <div className="flex gap-1 px-2 py-1.5 border-b border-terminal-border shrink-0">
-        {(['all', 'warning', 'watch'] as const).map((f) => (
+        {FILTERS.map((f) => (
           <button
             key={f}
-            onClick={() => setFilter(f)}
+            onClick={() => onFilter(f)}
             className={`retro-btn px-2 py-0.5 text-xs ${filter === f ? 'active' : ''}`}
           >
-            {f.toUpperCase()}
+            {f}
           </button>
         ))}
         {lastFetched && (
@@ -70,13 +100,13 @@ function AlertList({
         )}
       </div>
 
-      {filtered.length === 0 ? (
+      {alerts.length === 0 ? (
         <div className="flex-1 flex items-center justify-center text-xs text-terminal-border">
-          {alerts.length === 0 ? 'FETCHING...' : 'NO MATCHING ALERTS'}
+          NO {FILTER_TITLES[filter]}
         </div>
       ) : (
         <div className="flex-1 overflow-y-auto">
-          {filtered.map((alert) => (
+          {alerts.map((alert) => (
             <AlertRow key={alert.id} alert={alert} onSelect={onSelect} />
           ))}
         </div>
@@ -90,7 +120,7 @@ function AlertRow({
   onSelect,
 }: {
   alert: WeatherAlert;
-  onSelect: (id: string) => void;
+  onSelect: (alert: WeatherAlert) => void;
 }) {
   const color = alertColor(alert.event);
   const tornado = isTornado(alert.event);
@@ -102,7 +132,7 @@ function AlertRow({
 
   return (
     <button
-      onClick={() => onSelect(alert.id)}
+      onClick={() => onSelect(alert)}
       className="w-full text-left px-3 py-2 border-b border-terminal-border-dim hover:bg-phosphor-dark transition-colors"
     >
       {/* Event badge */}

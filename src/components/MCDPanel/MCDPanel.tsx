@@ -1,4 +1,6 @@
 import { useMcdStore } from '../../store/mcdStore';
+import { useUIStore } from '../../store/uiStore';
+import { polygonBounds } from '../../lib/geoBounds';
 import { TerminalPanel } from '../shared/TerminalPanel';
 import type { MesoscaleDiscussion } from '../../types';
 
@@ -11,15 +13,24 @@ export function MCDPanel({ onClose }: MCDPanelProps) {
   const fetchedAt = useMcdStore((s) => s.fetchedAt);
   const selectedMcdNum = useMcdStore((s) => s.selectedMcdNum);
   const selectMcd = useMcdStore((s) => s.selectMcd);
+  const focusMap = useUIStore((s) => s.focusMap);
 
   const selected = mcds.find((m) => m.productNum === selectedMcdNum) ?? null;
+
+  const handleSelect = (m: MesoscaleDiscussion) => {
+    selectMcd(m.productNum);
+    if (m.polygon) {
+      const bounds = polygonBounds(m.polygon);
+      if (bounds) focusMap({ key: `mcd-${m.productNum}-${Date.now()}`, kind: 'bounds', bounds });
+    }
+  };
 
   return (
     <TerminalPanel title={`MCD (${mcds.length})`} onClose={onClose} width="w-80">
       {selected ? (
         <McdDetail mcd={selected} onBack={() => selectMcd(null)} />
       ) : (
-        <McdList mcds={mcds} onSelect={(m) => selectMcd(m.productNum)} fetchedAt={fetchedAt} />
+        <McdList mcds={mcds} onSelect={handleSelect} fetchedAt={fetchedAt} />
       )}
     </TerminalPanel>
   );

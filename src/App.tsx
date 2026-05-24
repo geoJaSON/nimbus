@@ -7,6 +7,7 @@ import { AlertPanel } from './components/AlertPanel/AlertPanel';
 import { LSRPanel } from './components/LSRPanel/LSRPanel';
 import { SCITPanel } from './components/SCITPanel/SCITPanel';
 import { MCDPanel } from './components/MCDPanel/MCDPanel';
+import { AboutModal } from './components/AboutModal/AboutModal';
 import { StatusBar } from './components/shared/StatusBar';
 import { useUIStore } from './store/uiStore';
 import { useNearestStation } from './hooks/useNearestStation';
@@ -16,6 +17,7 @@ import { useSpcData } from './hooks/useSpcData';
 import { useLsrFetch } from './hooks/useLsrFetch';
 import { useScitData } from './hooks/useScitData';
 import { useMcdData } from './hooks/useMcdData';
+// import { useMpingData } from './hooks/useMpingData'; // paused — OU feed requires auth
 
 export default function App() {
   const stationPickerOpen = useUIStore((s) => s.stationPickerOpen);
@@ -23,11 +25,13 @@ export default function App() {
   const lsrPanelOpen = useUIStore((s) => s.lsrPanelOpen);
   const scitPanelOpen = useUIStore((s) => s.scitPanelOpen);
   const mcdPanelOpen = useUIStore((s) => s.mcdPanelOpen);
+  const aboutModalOpen = useUIStore((s) => s.aboutModalOpen);
   const setStationPickerOpen = useUIStore((s) => s.setStationPickerOpen);
   const setAlertPanelOpen = useUIStore((s) => s.setAlertPanelOpen);
   const setLsrPanelOpen = useUIStore((s) => s.setLsrPanelOpen);
   const setScitPanelOpen = useUIStore((s) => s.setScitPanelOpen);
   const setMcdPanelOpen = useUIStore((s) => s.setMcdPanelOpen);
+  const setAboutModalOpen = useUIStore((s) => s.setAboutModalOpen);
 
   useNearestStation();
   useRadarLoop();
@@ -36,6 +40,7 @@ export default function App() {
   useLsrFetch();
   useScitData();
   useMcdData();
+  // useMpingData(); // paused — OU feed requires auth
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-terminal text-phosphor font-mono">
@@ -64,6 +69,10 @@ export default function App() {
       </div>
 
       <StatusBar />
+
+      {aboutModalOpen && (
+        <AboutModal onClose={() => setAboutModalOpen(false)} />
+      )}
     </div>
   );
 }

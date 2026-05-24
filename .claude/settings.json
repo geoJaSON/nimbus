@@ -5,7 +5,8 @@
       "Bash(python3 -c \"import json; d=json.load\\(open\\('/tmp/swomcd.json'\\)\\); items=d.get\\('@graph',[]\\); print\\('items:', len\\(items\\)\\); [print\\(i.get\\('id'\\),'-',i.get\\('issuanceTime'\\)\\) for i in items[:3]]\")",
       "Bash(python3 -c \"import json; print\\(json.load\\(open\\('/tmp/swomcd.json'\\)\\)['@graph'][0]['id']\\)\")",
       "Bash(curl -s https://api.weather.gov/products/__TRACKED_VAR__ -H 'User-Agent: nimbus/0.1')",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('productText',''\\)[:600]\\)\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('productText',''\\)[:600]\\)\")",
+      "Bash(npx tsc *)"
     ]
   }
 }

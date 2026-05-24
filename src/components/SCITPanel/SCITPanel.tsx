@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useScitStore } from '../../store/scitStore';
+import { useUIStore } from '../../store/uiStore';
 import { dbzColor, isCellSevere } from '../../lib/scitData';
 import { TerminalPanel } from '../shared/TerminalPanel';
 import type { StormCell } from '../../types';
@@ -17,9 +18,15 @@ export function SCITPanel({ onClose }: SCITPanelProps) {
   const fetchedAt = useScitStore((s) => s.fetchedAt);
   const selectedCellId = useScitStore((s) => s.selectedCellId);
   const selectCell = useScitStore((s) => s.selectCell);
+  const focusMap = useUIStore((s) => s.focusMap);
   const [filter, setFilter] = useState<CellFilter>('ALL');
 
   const selected = cells.find((c) => c.id === selectedCellId) ?? null;
+
+  const handleSelect = (c: StormCell) => {
+    selectCell(c.id);
+    focusMap({ key: `cell-${c.id}-${Date.now()}`, kind: 'point', lon: c.lon, lat: c.lat });
+  };
 
   return (
     <TerminalPanel title={`SCIT (${cells.length})`} onClose={onClose} width="w-80">
@@ -30,7 +37,7 @@ export function SCITPanel({ onClose }: SCITPanelProps) {
           cells={cells}
           filter={filter}
           onFilter={setFilter}
-          onSelect={(c) => selectCell(c.id)}
+          onSelect={handleSelect}
           fetchedAt={fetchedAt}
         />
       )}

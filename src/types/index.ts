@@ -70,6 +70,27 @@ export interface StormCell {
   valid: Date;
 }
 
+// mPING crowdsourced precipitation report (via OU/NSSL mPING2 project,
+// re-served by Iowa State IEM in GeoJSON).
+export type MpingCategory =
+  | 'RAIN'
+  | 'SNOW'
+  | 'MIXED'
+  | 'HAIL'
+  | 'WIND'
+  | 'TORNADO'
+  | 'FLOOD'
+  | 'OTHER';
+
+export interface MpingReport {
+  id: string;
+  lat: number;
+  lon: number;
+  time: Date;
+  category: MpingCategory;
+  description: string;     // e.g. "Hail (Quarter, 1.00 in)" or raw IEM label
+}
+
 export interface MesoscaleDiscussion {
   productNum: number;
   year: number;

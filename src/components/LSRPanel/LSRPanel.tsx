@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSpcStore } from '../../store/spcStore';
+import { useUIStore } from '../../store/uiStore';
 import { LSR_COLORS } from '../../lib/lsrParsing';
 import { TerminalPanel } from '../shared/TerminalPanel';
 import type { LocalStormReport } from '../../types';
@@ -17,9 +18,15 @@ export function LSRPanel({ onClose }: LSRPanelProps) {
   const lsrFetchedAt = useSpcStore((s) => s.lsrFetchedAt);
   const selectedLsrId = useSpcStore((s) => s.selectedLsrId);
   const selectLsr = useSpcStore((s) => s.selectLsr);
+  const focusMap = useUIStore((s) => s.focusMap);
   const [filter, setFilter] = useState<LsrFilter>('ALL');
 
   const selected = lsrs.find((l) => l.id === selectedLsrId) ?? null;
+
+  const handleSelect = (l: LocalStormReport) => {
+    selectLsr(l.id);
+    focusMap({ key: `lsr-${l.id}-${Date.now()}`, kind: 'point', lon: l.lon, lat: l.lat });
+  };
 
   return (
     <TerminalPanel title={`LSR (${lsrs.length})`} onClose={onClose} width="w-80">
@@ -30,7 +37,7 @@ export function LSRPanel({ onClose }: LSRPanelProps) {
           lsrs={lsrs}
           filter={filter}
           onFilter={setFilter}
-          onSelect={(l) => selectLsr(l.id)}
+          onSelect={handleSelect}
           fetchedAt={lsrFetchedAt}
         />
       )}

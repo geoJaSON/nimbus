@@ -152,3 +152,28 @@
   color: #00b32c;
   margin-top: 2px;
 }
+
+.scit-hover-popup .maplibregl-popup-content {
+  pointer-events: none;
+  min-width: 130px;
+}
+
+.scit-hover-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.scit-hover-row > span:first-child {
+  color: #00b32c;
+}
+
+.scit-hover-row > span:last-child {
+  color: #00ff41;
+}
+
+.scit-hover-row.scit-hover-warn > span {
+  color: #ff4444;
+  font-weight: bold;
+}

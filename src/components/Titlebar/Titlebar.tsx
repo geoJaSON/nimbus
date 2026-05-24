@@ -4,8 +4,8 @@ import { useAlertStore } from '../../store/alertStore';
 import { useSpcStore } from '../../store/spcStore';
 import { useScitStore } from '../../store/scitStore';
 import { useMcdStore } from '../../store/mcdStore';
-import { useUIStore } from '../../store/uiStore';
-import { isTornado, isWatch } from '../../lib/alertParsing';
+import { useUIStore, type AlertFilter } from '../../store/uiStore';
+import { isTornado, isWatch, isSevere } from '../../lib/alertParsing';
 import { isCellSevere } from '../../lib/scitData';
 import { highestActiveCategory, SPC_BADGE_COLORS } from '../../lib/spcOutlook';
 import { RetroButton } from '../shared/RetroButton';
@@ -20,14 +20,17 @@ export function Titlebar() {
 
   const stationPickerOpen = useUIStore((s) => s.stationPickerOpen);
   const alertPanelOpen = useUIStore((s) => s.alertPanelOpen);
+  const alertFilter = useUIStore((s) => s.alertFilter);
   const lsrPanelOpen = useUIStore((s) => s.lsrPanelOpen);
   const scitPanelOpen = useUIStore((s) => s.scitPanelOpen);
   const mcdPanelOpen = useUIStore((s) => s.mcdPanelOpen);
   const toggleStationPicker = useUIStore((s) => s.toggleStationPicker);
-  const toggleAlertPanel = useUIStore((s) => s.toggleAlertPanel);
   const toggleLsrPanel = useUIStore((s) => s.toggleLsrPanel);
   const toggleScitPanel = useUIStore((s) => s.toggleScitPanel);
   const toggleMcdPanel = useUIStore((s) => s.toggleMcdPanel);
+  const openAlertPanel = useUIStore((s) => s.openAlertPanel);
+  const setAlertPanelOpen = useUIStore((s) => s.setAlertPanelOpen);
+  const setAboutModalOpen = useUIStore((s) => s.setAboutModalOpen);
 
   const [now, setNow] = useState(new Date());
   const [flash, setFlash] = useState(true);
@@ -38,7 +41,8 @@ export function Titlebar() {
   }, []);
 
   const tornadoCount = alerts.filter((a) => isTornado(a.event)).length;
-  const warningCount = alerts.filter((a) => !isWatch(a.event)).length;
+  const severeCount = alerts.filter((a) => isSevere(a.event)).length;
+  const warnCount = alerts.filter((a) => !isWatch(a.event) && !isSevere(a.event)).length;
   const watchCount = alerts.filter((a) => isWatch(a.event)).length;
   const severeCells = cells.filter(isCellSevere).length;
 
@@ -54,6 +58,18 @@ export function Titlebar() {
   }, [outlookFeatures]);
 
   const utcTime = now.toISOString().slice(11, 19) + 'Z';
+
+  // Clicking an alert-filter badge: if its panel is already open showing
+  // the same filter, close it; otherwise open with that filter.
+  const onAlertFilterClick = (filter: AlertFilter) => {
+    if (alertPanelOpen && alertFilter === filter) {
+      setAlertPanelOpen(false);
+    } else {
+      openAlertPanel(filter);
+    }
+  };
+
+  const isActiveFilter = (filter: AlertFilter) => alertPanelOpen && alertFilter === filter;
 
   return (
     <div className="flex items-center gap-3 px-4 py-2 border-b border-terminal-border bg-terminal shrink-0 select-none">
@@ -88,28 +104,45 @@ export function Titlebar() {
           {spcRisk} RISK
         </span>
       )}
-      {tornadoCount > 0 && (
-        <span
-          className="text-xs font-bold px-2 py-0.5 border"
+
+      {/* Alert filter buttons — replace the old ALERTS panel. Each opens the
+          panel with its respective filter. */}
+      {severeCount > 0 && (
+        <button
+          onClick={() => onAlertFilterClick('SEVERE')}
+          className={`text-xs font-bold px-2 py-0.5 border transition-colors ${
+            isActiveFilter('SEVERE') ? 'bg-warn-svr/20' : 'hover:bg-warn-svr/10'
+          }`}
           style={{
-            color: '#ff0000',
-            borderColor: '#ff0000',
-            opacity: flash ? 1 : 0.3,
-            transition: 'opacity 0.1s',
+            color: tornadoCount > 0 ? '#ff0000' : undefined,
+            borderColor: tornadoCount > 0 ? '#ff0000' : undefined,
+            opacity: tornadoCount > 0 && !flash ? 0.3 : 1,
+            transition: 'opacity 0.1s, background-color 0.1s',
           }}
+          title={tornadoCount > 0 ? `${tornadoCount} tornado warning(s) in severe set` : undefined}
         >
-          ◆ {tornadoCount} TOR WARN
-        </span>
+          ◆ {severeCount} SEVERE
+        </button>
       )}
-      {warningCount > 0 && tornadoCount === 0 && (
-        <span className="text-xs text-warn-svr border border-warn-svr px-2 py-0.5">
-          ◆ {warningCount} WARN
-        </span>
+      {warnCount > 0 && (
+        <button
+          onClick={() => onAlertFilterClick('WARN')}
+          className={`text-xs text-warn-svr border border-warn-svr px-2 py-0.5 transition-colors ${
+            isActiveFilter('WARN') ? 'bg-warn-svr/20' : 'hover:bg-warn-svr/10'
+          }`}
+        >
+          ◆ {warnCount} WARN
+        </button>
       )}
-      {watchCount > 0 && tornadoCount === 0 && (
-        <span className="text-xs text-amber-dim border border-amber-dim px-2 py-0.5">
+      {watchCount > 0 && (
+        <button
+          onClick={() => onAlertFilterClick('WATCH')}
+          className={`text-xs text-amber-dim border border-amber-dim px-2 py-0.5 transition-colors ${
+            isActiveFilter('WATCH') ? 'bg-amber-dim/20' : 'hover:bg-amber-dim/10'
+          }`}
+        >
           ◇ {watchCount} WATCH
-        </span>
+        </button>
       )}
       {severeCells > 0 && (
         <span className="text-xs text-warn-svr border border-warn-svr px-2 py-0.5" title="Severe storm cells in range">
@@ -118,14 +151,6 @@ export function Titlebar() {
       )}
 
       <div className="ml-auto flex items-center gap-2 text-xs text-phosphor-dim">
-        <RetroButton
-          active={alertPanelOpen}
-          onClick={toggleAlertPanel}
-          variant={tornadoCount > 0 ? 'danger' : 'default'}
-        >
-          ALERTS{alerts.length > 0 ? ` (${alerts.length})` : ''}
-        </RetroButton>
-
         {mcdCount > 0 && (
           <RetroButton active={mcdPanelOpen} onClick={toggleMcdPanel}>
             MCD ({mcdCount})
@@ -143,6 +168,14 @@ export function Titlebar() {
         <RetroButton active={stationPickerOpen} onClick={toggleStationPicker}>
           STATIONS
         </RetroButton>
+
+        <button
+          onClick={() => setAboutModalOpen(true)}
+          className="text-phosphor-dim hover:text-phosphor px-1.5 py-0.5 text-xs"
+          title="About Nimbus"
+        >
+          [?]
+        </button>
 
         <div className="w-px h-4 bg-terminal-border" />
 

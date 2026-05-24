@@ -6,10 +6,12 @@ import { useAlertStore } from '../../store/alertStore';
 import { useSpcStore } from '../../store/spcStore';
 import { useScitStore } from '../../store/scitStore';
 import { useMcdStore } from '../../store/mcdStore';
+import { useMpingStore } from '../../store/mpingStore';
 import { useUIStore } from '../../store/uiStore';
 import { getProduct, buildWmsUrl } from '../../lib/radarProducts';
-import { alertColor, isWatch, isTornado } from '../../lib/alertParsing';
+import { alertColor, isWatch, isTornado, isSevere } from '../../lib/alertParsing';
 import { LSR_COLORS } from '../../lib/lsrParsing';
+import { MPING_COLORS } from '../../lib/mpingData';
 import { dbzColor, cellRadius, projectPosition, isCellSevere } from '../../lib/scitData';
 
 const DARK_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
@@ -24,6 +26,7 @@ const ALERT_SOURCE = 'alerts-geojson';
 const SPC_SOURCE = 'spc-outlook-geojson';
 const MCD_SOURCE = 'mcd-geojson';
 const LSR_SOURCE = 'lsrs-geojson';
+const MPING_SOURCE = 'mping-geojson';
 const SCIT_SOURCE = 'scit-cells-geojson';
 const SCIT_MOTION_SOURCE = 'scit-motion-geojson';
 
@@ -70,10 +73,14 @@ export function RadarMap() {
   const toggleMcds = useMcdStore((s) => s.toggleMcds);
   const selectMcd = useMcdStore((s) => s.selectMcd);
 
-  const setAlertPanelOpen = useUIStore((s) => s.setAlertPanelOpen);
+  const mpingReports = useMpingStore((s) => s.reports);
+  const showMping = useMpingStore((s) => s.showReports);
+
+  const openAlertPanel = useUIStore((s) => s.openAlertPanel);
   const setLsrPanelOpen = useUIStore((s) => s.setLsrPanelOpen);
   const setScitPanelOpen = useUIStore((s) => s.setScitPanelOpen);
   const setMcdPanelOpen = useUIStore((s) => s.setMcdPanelOpen);
+  const mapFocus = useUIStore((s) => s.mapFocus);
 
   // ── Map init ──────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -174,16 +181,29 @@ export function RadarMap() {
     });
 
     // ── SCIT motion vectors (below cell markers) ──────────────────────────
+    // Two layers: a black halo for contrast, then a bold white dashed line on top.
     m.addSource(SCIT_MOTION_SOURCE, { type: 'geojson', data: EMPTY });
+    m.addLayer({
+      id: 'scit-motion-halo',
+      type: 'line',
+      source: SCIT_MOTION_SOURCE,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': '#000000',
+        'line-width': 4,
+        'line-opacity': 0.85,
+      },
+    });
     m.addLayer({
       id: 'scit-motion-lines',
       type: 'line',
       source: SCIT_MOTION_SOURCE,
+      layout: { 'line-cap': 'butt', 'line-join': 'round' },
       paint: {
-        'line-color': ['get', 'color'],
-        'line-width': 1.5,
-        'line-opacity': 0.7,
-        'line-dasharray': [1, 1.5],
+        'line-color': '#ffffff',
+        'line-width': 1.8,
+        'line-opacity': 1,
+        'line-dasharray': [2, 1.5],
       },
     });
 
@@ -213,6 +233,21 @@ export function RadarMap() {
         'circle-stroke-color': '#ff2222',
         'circle-stroke-width': 1.5,
         'circle-opacity': 1,
+      },
+    });
+
+    // ── mPING crowdsourced reports (below LSRs) ───────────────────────────
+    m.addSource(MPING_SOURCE, { type: 'geojson', data: EMPTY });
+    m.addLayer({
+      id: 'mping-points',
+      type: 'circle',
+      source: MPING_SOURCE,
+      paint: {
+        'circle-radius': 3.5,
+        'circle-color': ['get', 'color'],
+        'circle-stroke-color': '#000000',
+        'circle-stroke-width': 1,
+        'circle-opacity': 0.85,
       },
     });
 
@@ -248,12 +283,15 @@ export function RadarMap() {
     });
 
     m.on('click', 'alerts-warning-fill', (e) => {
-      const id = e.features?.[0]?.properties?.id as string | undefined;
-      if (id) { selectAlert(id); setAlertPanelOpen(true); }
+      const props = e.features?.[0]?.properties;
+      const id = props?.id as string | undefined;
+      if (!id) return;
+      selectAlert(id);
+      openAlertPanel(props?.severe ? 'SEVERE' : 'WARN');
     });
     m.on('click', 'alerts-watch-fill', (e) => {
       const id = e.features?.[0]?.properties?.id as string | undefined;
-      if (id) { selectAlert(id); setAlertPanelOpen(true); }
+      if (id) { selectAlert(id); openAlertPanel('WATCH'); }
     });
     m.on('click', 'lsrs-circles', (e) => {
       const id = e.features?.[0]?.properties?.id as string | undefined;
@@ -273,12 +311,93 @@ export function RadarMap() {
       'alerts-warning-fill',
       'alerts-watch-fill',
       'lsrs-circles',
+      'mping-points',
       'scit-cells',
       'mcd-fill',
     ];
     interactive.forEach((id) => {
       m.on('mouseenter', id, () => { m.getCanvas().style.cursor = 'pointer'; });
       m.on('mouseleave', id, () => { m.getCanvas().style.cursor = ''; });
+    });
+
+    // ── SCIT cell hover popup ─────────────────────────────────────────────
+    const scitHoverPopup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 12,
+      className: 'scit-hover-popup',
+    });
+    m.on('mousemove', 'scit-cells', (e) => {
+      const f = e.features?.[0];
+      if (!f?.properties) return;
+      const p = f.properties;
+      const tvs = String(p.tvs ?? 'NONE');
+      const meso = String(p.meso ?? 'NONE');
+      const hail = Number(p.maxHailSize ?? 0);
+      const posh = Number(p.posh ?? 0);
+      const rows: string[] = [];
+      rows.push(`<div class="terminal-popup-title">CELL ${String(p.id)}</div>`);
+      rows.push(
+        `<div class="scit-hover-row"><span>dBZ</span><span>${Number(p.maxDbz)}</span></div>`,
+      );
+      rows.push(
+        `<div class="scit-hover-row"><span>TOP</span><span>${Number(p.top).toFixed(0)}K FT</span></div>`,
+      );
+      rows.push(
+        `<div class="scit-hover-row"><span>VIL</span><span>${Number(p.vil)}</span></div>`,
+      );
+      rows.push(
+        `<div class="scit-hover-row"><span>MOTION</span><span>${Number(p.motionDir)}° / ${Number(p.motionSpeed)} KT</span></div>`,
+      );
+      if (posh > 0) {
+        rows.push(`<div class="scit-hover-row"><span>POSH</span><span>${posh}%</span></div>`);
+      }
+      if (hail > 0) {
+        rows.push(
+          `<div class="scit-hover-row"><span>HAIL</span><span>${hail.toFixed(2)}″</span></div>`,
+        );
+      }
+      if (tvs !== 'NONE') {
+        rows.push(`<div class="scit-hover-row scit-hover-warn"><span>TVS</span><span>${tvs}</span></div>`);
+      }
+      if (meso !== 'NONE') {
+        rows.push(`<div class="scit-hover-row scit-hover-warn"><span>MESO</span><span>${meso}</span></div>`);
+      }
+      scitHoverPopup.setLngLat(e.lngLat).setHTML(rows.join('')).addTo(m);
+    });
+    m.on('mouseleave', 'scit-cells', () => {
+      scitHoverPopup.remove();
+    });
+
+    // ── mPING report hover popup ──────────────────────────────────────────
+    const mpingHoverPopup = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      offset: 10,
+      className: 'scit-hover-popup',
+    });
+    m.on('mousemove', 'mping-points', (e) => {
+      const f = e.features?.[0];
+      if (!f?.properties) return;
+      const p = f.properties;
+      const description = String(p.description ?? p.category ?? 'Report');
+      const ageMin = p.ageMin !== undefined ? Number(p.ageMin) : null;
+      const ageText = ageMin === null
+        ? ''
+        : ageMin < 60
+          ? `${ageMin}M AGO`
+          : `${Math.round(ageMin / 60)}H AGO`;
+      const rows: string[] = [
+        `<div class="terminal-popup-title">${String(p.category)}</div>`,
+        `<div class="scit-hover-row"><span>${description}</span></div>`,
+      ];
+      if (ageText) {
+        rows.push(`<div class="scit-hover-row"><span>${ageText}</span></div>`);
+      }
+      mpingHoverPopup.setLngLat(e.lngLat).setHTML(rows.join('')).addTo(m);
+    });
+    m.on('mouseleave', 'mping-points', () => {
+      mpingHoverPopup.remove();
     });
   }, [mapReady]);
 
@@ -300,6 +419,7 @@ export function RadarMap() {
           color: alertColor(a.event),
           watch: isWatch(a.event),
           tornado: isTornado(a.event),
+          severe: isSevere(a.event),
         },
       }));
 
@@ -362,6 +482,29 @@ export function RadarMap() {
     source.setData({ type: 'FeatureCollection', features });
   }, [lsrs, mapReady]);
 
+  // ── Sync mPING reports ────────────────────────────────────────────────────
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !mapReady) return;
+    const source = m.getSource(MPING_SOURCE) as maplibregl.GeoJSONSource | undefined;
+    if (!source) return;
+
+    const now = Date.now();
+    const features: GeoJSON.Feature[] = mpingReports.map((r) => ({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [r.lon, r.lat] },
+      properties: {
+        id: r.id,
+        category: r.category,
+        color: MPING_COLORS[r.category],
+        description: r.description,
+        ageMin: Math.round((now - r.time.getTime()) / 60000),
+      },
+    }));
+
+    source.setData({ type: 'FeatureCollection', features });
+  }, [mpingReports, mapReady]);
+
   // ── Sync SCIT cells + motion vectors ──────────────────────────────────────
   useEffect(() => {
     const m = map.current;
@@ -378,6 +521,15 @@ export function RadarMap() {
         color: dbzColor(c.maxDbz),
         radius: cellRadius(c.vil),
         severe: isCellSevere(c),
+        maxDbz: c.maxDbz,
+        top: c.top,
+        vil: c.vil,
+        posh: c.posh,
+        maxHailSize: c.maxHailSize,
+        tvs: c.tvs,
+        meso: c.meso,
+        motionDir: c.motionDir,
+        motionSpeed: c.motionSpeed,
       },
     }));
 
@@ -425,6 +577,13 @@ export function RadarMap() {
   useEffect(() => {
     const m = map.current;
     if (!m || !mapReady) return;
+    if (m.getLayer('mping-points'))
+      m.setLayoutProperty('mping-points', 'visibility', showMping ? 'visible' : 'none');
+  }, [showMping, mapReady]);
+
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !mapReady) return;
     const vis = showCells ? 'visible' : 'none';
     ['scit-cells', 'scit-cells-severe-ring'].forEach((id) => {
       if (m.getLayer(id)) m.setLayoutProperty(id, 'visibility', vis);
@@ -436,8 +595,9 @@ export function RadarMap() {
     if (!m || !mapReady) return;
     // Motion lines hidden when cells hidden, OR when motion toggle off
     const vis = showCells && showMotion ? 'visible' : 'none';
-    if (m.getLayer('scit-motion-lines'))
-      m.setLayoutProperty('scit-motion-lines', 'visibility', vis);
+    ['scit-motion-halo', 'scit-motion-lines'].forEach((id) => {
+      if (m.getLayer(id)) m.setLayoutProperty(id, 'visibility', vis);
+    });
   }, [showCells, showMotion, mapReady]);
 
   // ── Tornado warning flash ─────────────────────────────────────────────────
@@ -455,11 +615,16 @@ export function RadarMap() {
   }, [tornadoFlash, mapReady]);
 
   // ── Rebuild radar frame layers ────────────────────────────────────────────
+  // Only rebuild on loopFrames change (or initial mapReady). productCode and
+  // station changes flow through useRadarLoop, which refetches timestamps and
+  // calls setLoopFrames — that's what should drive the rebuild. Rebuilding
+  // earlier (on productCode alone) creates layers with the NEW product but
+  // OLD timestamps, which return invalid tiles and leave the layer stuck.
   useEffect(() => {
     const m = map.current;
     if (!m || !mapReady) return;
     rebuildFrameLayers(m);
-  }, [mapReady, loopFrames, station?.id, productCode]);
+  }, [mapReady, loopFrames]);
 
   useEffect(() => {
     const m = map.current;
@@ -474,6 +639,21 @@ export function RadarMap() {
     if (!station || !map.current) return;
     map.current.flyTo({ center: [station.lon, station.lat], zoom: 7, duration: 1200 });
   }, [station?.id]);
+
+  // ── Focus on selected list item ───────────────────────────────────────────
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !mapReady || !mapFocus) return;
+    if (mapFocus.kind === 'point') {
+      m.flyTo({
+        center: [mapFocus.lon, mapFocus.lat],
+        zoom: Math.max(m.getZoom(), mapFocus.zoom ?? 9),
+        duration: 900,
+      });
+    } else {
+      m.fitBounds(mapFocus.bounds, { padding: 80, duration: 900, maxZoom: 11 });
+    }
+  }, [mapFocus, mapReady]);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   function clearFrameLayers(m: maplibregl.Map) {

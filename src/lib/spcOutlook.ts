@@ -1,7 +1,9 @@
 import type { SpcOutlookFeature } from '../types';
 
 const SPC_ARCHIVE = 'https://www.spc.noaa.gov/products/outlook/archive';
-const ISSUANCE_TIMES = ['2000', '1630', '1300', '1200', '0600', '0100'];
+
+// SPC Day 1 convective outlook is issued at these UTC times each day.
+const ISSUANCE_HHMM = [2000, 1630, 1300, 1200, 600, 100];
 
 function dateStr(d: Date): string {
   return d.toISOString().slice(0, 10).replace(/-/g, '');
@@ -11,37 +13,63 @@ function yearStr(d: Date): string {
   return d.toISOString().slice(0, 4);
 }
 
+function pad4(n: number): string {
+  return String(n).padStart(4, '0');
+}
+
+// Compute up to 2 candidate (date, time) pairs to try, based on current UTC.
+// We try the most-recently-expected issuance first, then fall back one slot
+// (handles the ~5-10 min publishing lag right after a new issuance).
+function candidateIssuances(now: Date): Array<{ date: Date; time: string }> {
+  const utcHHMM = now.getUTCHours() * 100 + now.getUTCMinutes();
+  const yesterday = new Date(now.getTime() - 86400000);
+
+  // Find the index of the most recent issuance time <= utcHHMM (today),
+  // or fall back to the last issuance of yesterday.
+  const idx = ISSUANCE_HHMM.findIndex((t) => t <= utcHHMM);
+
+  const candidates: Array<{ date: Date; time: string }> = [];
+  if (idx === -1) {
+    // Before today's first issuance — yesterday's last is current.
+    candidates.push({ date: yesterday, time: pad4(ISSUANCE_HHMM[0]) });
+    candidates.push({ date: yesterday, time: pad4(ISSUANCE_HHMM[1]) });
+  } else {
+    candidates.push({ date: now, time: pad4(ISSUANCE_HHMM[idx]) });
+    // Fallback: the previous issuance (might be yesterday's 2000z if idx is last).
+    if (idx + 1 < ISSUANCE_HHMM.length) {
+      candidates.push({ date: now, time: pad4(ISSUANCE_HHMM[idx + 1]) });
+    } else {
+      candidates.push({ date: yesterday, time: pad4(ISSUANCE_HHMM[0]) });
+    }
+  }
+  return candidates;
+}
+
 export async function fetchSpcDay1Outlook(): Promise<SpcOutlookFeature[]> {
-  const now = new Date();
-  // Try today then yesterday — early UTC morning the day's outlook may not exist yet
-  const dates = [now, new Date(now.getTime() - 86400000)];
+  const candidates = candidateIssuances(new Date());
 
-  for (const d of dates) {
-    const date = dateStr(d);
-    const year = yearStr(d);
-    for (const time of ISSUANCE_TIMES) {
-      const url = `${SPC_ARCHIVE}/${year}/day1otlk_${date}_${time}_cat.lyr.geojson`;
-      try {
-        const res = await fetch(url);
-        if (!res.ok) continue;
-        const data = await res.json();
-        if (!Array.isArray(data?.features) || data.features.length === 0) continue;
+  for (const { date, time } of candidates) {
+    const url = `${SPC_ARCHIVE}/${yearStr(date)}/day1otlk_${dateStr(date)}_${time}_cat.lyr.geojson`;
+    try {
+      const res = await fetch(url);
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (!Array.isArray(data?.features) || data.features.length === 0) continue;
 
-        return data.features
-          .map((f: any): SpcOutlookFeature | null => {
-            if (!f.geometry || !f.properties) return null;
-            return {
-              label: f.properties.LABEL ?? '',
-              label2: f.properties.LABEL2 ?? '',
-              fill: (f.properties.fill ?? f.properties.FILL ?? '#808080').slice(0, 7),
-              stroke: (f.properties.stroke ?? f.properties.STROKE ?? '#808080').slice(0, 7),
-              geometry: f.geometry,
-            };
-          })
-          .filter((f: SpcOutlookFeature | null): f is SpcOutlookFeature => f !== null);
-      } catch {
-        // try next time slot
-      }
+      return data.features
+        .map((f: any): SpcOutlookFeature | null => {
+          if (!f.geometry || !f.properties) return null;
+          return {
+            label: f.properties.LABEL ?? '',
+            label2: f.properties.LABEL2 ?? '',
+            fill: (f.properties.fill ?? f.properties.FILL ?? '#808080').slice(0, 7),
+            stroke: (f.properties.stroke ?? f.properties.STROKE ?? '#808080').slice(0, 7),
+            geometry: f.geometry,
+          };
+        })
+        .filter((f: SpcOutlookFeature | null): f is SpcOutlookFeature => f !== null);
+    } catch {
+      // try next candidate
     }
   }
 

@@ -78,3 +78,17 @@ export function isWatch(event: string): boolean {
 export function isTornado(event: string): boolean {
   return event.toLowerCase().includes('tornado warning');
 }
+
+// "Severe" = the high-impact convective/flood emergencies. Tornado warnings,
+// severe thunderstorm warnings, flash flood emergencies, special marine warnings.
+export function isSevere(event: string): boolean {
+  const e = event.toLowerCase();
+  if (e.includes('watch')) return false;
+  return (
+    e.includes('tornado warning') ||
+    e.includes('severe thunderstorm warning') ||
+    e.includes('flash flood emergency') ||
+    e.includes('special marine warning') ||
+    e.includes('extreme wind warning')
+  );
+}

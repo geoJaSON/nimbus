@@ -4,7 +4,9 @@ import { useSpcStore } from '../store/spcStore';
 import { parseLsrText } from '../lib/lsrParsing';
 
 const NWS_API = 'https://api.weather.gov';
-const USER_AGENT = 'nimbus-weather-radar/0.1 (jasjordan@proton.me)';
+// Browsers ignore custom User-Agent on fetch, but NWS still wants to identify
+// callers. Send Accept for content negotiation; the browser UA goes through.
+const NWS_HEADERS = { Accept: 'application/ld+json' };
 const REFRESH_MS = 10 * 60 * 1000;
 
 export function useLsrFetch() {
@@ -24,9 +26,11 @@ export function useLsrFetch() {
 
     async function load() {
       try {
+        // Path-based endpoint is the documented form for "products of type X
+        // at location Y" and is more reliable than the ?type=&office= filter.
         const listRes = await fetch(
-          `${NWS_API}/products?type=LSR&office=${wfo}&limit=10`,
-          { headers: { 'User-Agent': USER_AGENT }, signal: controller.signal },
+          `${NWS_API}/products/types/LSR/locations/${wfo}`,
+          { headers: NWS_HEADERS, signal: controller.signal },
         );
         if (!listRes.ok) {
           setLsrs([], new Date());
@@ -39,7 +43,7 @@ export function useLsrFetch() {
           items.slice(0, 3).map(async (item: any) => {
             try {
               const r = await fetch(item['@id'], {
-                headers: { 'User-Agent': USER_AGENT },
+                headers: NWS_HEADERS,
                 signal: controller.signal,
               });
               if (!r.ok) return [];
