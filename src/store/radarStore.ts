@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { RadarStation, LoopFrame } from '../types';
 import { DEFAULT_PRODUCT } from '../lib/radarProducts';
 
@@ -26,7 +27,9 @@ interface RadarState {
   stepFrame: (delta: 1 | -1) => void;
 }
 
-export const useRadarStore = create<RadarState>((set, get) => ({
+export const useRadarStore = create<RadarState>()(
+  persist(
+    (set, get) => ({
   station: null,
   productCode: DEFAULT_PRODUCT.code,
   tilt: 0.5,
@@ -41,7 +44,11 @@ export const useRadarStore = create<RadarState>((set, get) => ({
   setProduct: (code) => set({ productCode: code }),
   setTilt: (tilt) => set({ tilt }),
   setLoopFrames: (frames) =>
-    set({ loopFrames: frames, currentFrameIndex: frames.length - 1, scanTime: frames[frames.length - 1]?.timestamp ?? null }),
+    set({
+      loopFrames: frames,
+      currentFrameIndex: Math.max(0, frames.length - 1),
+      scanTime: frames[frames.length - 1]?.timestamp ?? null,
+    }),
 
   // Like setLoopFrames, but preserves user's scrub position:
   //   - If they were viewing the latest frame, advance to the new latest.
@@ -87,4 +94,12 @@ export const useRadarStore = create<RadarState>((set, get) => ({
     const next = (currentFrameIndex + delta + loopFrames.length) % loopFrames.length;
     set({ currentFrameIndex: next, scanTime: loopFrames[next]?.timestamp ?? null });
   },
-}));
+    }),
+    {
+      name: 'nimbus-radar',
+      // Remember where the user was looking across launches; loop state is
+      // transient and refetched on startup.
+      partialize: (s) => ({ station: s.station, productCode: s.productCode, loopSpeed: s.loopSpeed }),
+    }
+  )
+);

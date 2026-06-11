@@ -2,10 +2,19 @@ import type { MpingReport, MpingCategory } from '../types';
 
 // OU/NSSL serves the live mPING report feed as GeoJSON. Returns the recent
 // (~1h) global set; we filter to the active radar's range below.
+// The v2 API requires a (free, research-use) API key from OU. Set
+// VITE_MPING_TOKEN in .env and the feed + map toggle light up automatically.
 const MPING_URL = 'https://mping.ou.edu/mping/api/v2/reports.geojson';
+const MPING_TOKEN: string | undefined = import.meta.env.VITE_MPING_TOKEN;
+
+export const MPING_ENABLED = Boolean(MPING_TOKEN);
 
 export async function fetchMpingReports(signal?: AbortSignal): Promise<MpingReport[]> {
-  const res = await fetch(MPING_URL, { signal });
+  if (!MPING_TOKEN) return [];
+  const res = await fetch(MPING_URL, {
+    signal,
+    headers: { Authorization: `Token ${MPING_TOKEN}` },
+  });
   if (!res.ok) return [];
   const data = await res.json();
   const features: any[] = data.features ?? [];

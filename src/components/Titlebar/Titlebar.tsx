@@ -31,6 +31,7 @@ export function Titlebar() {
   const openAlertPanel = useUIStore((s) => s.openAlertPanel);
   const setAlertPanelOpen = useUIStore((s) => s.setAlertPanelOpen);
   const setAboutModalOpen = useUIStore((s) => s.setAboutModalOpen);
+  const setSettingsModalOpen = useUIStore((s) => s.setSettingsModalOpen);
 
   const [now, setNow] = useState(new Date());
   const [flash, setFlash] = useState(true);
@@ -168,6 +169,14 @@ export function Titlebar() {
         <RetroButton active={stationPickerOpen} onClick={toggleStationPicker}>
           STATIONS
         </RetroButton>
+
+        <button
+          onClick={() => setSettingsModalOpen(true)}
+          className="text-phosphor-dim hover:text-phosphor px-1.5 py-0.5 text-xs"
+          title="Settings"
+        >
+          [CFG]
+        </button>
 
         <button
           onClick={() => setAboutModalOpen(true)}

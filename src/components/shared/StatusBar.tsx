@@ -1,5 +1,6 @@
 import { useRadarStore } from '../../store/radarStore';
 import { getProduct } from '../../lib/radarProducts';
+import { APP_VERSION } from '../../lib/version';
 
 export function StatusBar() {
   const station = useRadarStore((s) => s.station);
@@ -45,7 +46,7 @@ export function StatusBar() {
         <span className="text-amber animate-blink ml-auto">LOADING...</span>
       )}
       <span className="ml-auto text-terminal-border">
-        NIMBUS v0.1 · NWS NEXRAD
+        NIMBUS v{APP_VERSION} · NWS NEXRAD
       </span>
     </div>
   );

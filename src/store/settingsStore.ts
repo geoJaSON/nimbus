@@ -1,22 +1,22 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { ColorTableKey } from '../types';
+import type { ThemeKey, FontSizeKey } from '../theme/themes';
 
 interface SettingsState {
   homeLocation: { lat: number; lon: number } | null;
   colorTable: ColorTableKey;
-  showAlerts: boolean;
-  showLsr: boolean;
-  showMd: boolean;
-  showOutlooks: boolean;
   loopDepth: number;
+  theme: ThemeKey;
+  fontSize: FontSizeKey;
+  noiseFloorDbz: number; // hide reflectivity below this dBZ; 0 = off
 
   setHomeLocation: (loc: { lat: number; lon: number } | null) => void;
   setColorTable: (table: ColorTableKey) => void;
-  setShowAlerts: (v: boolean) => void;
-  setShowLsr: (v: boolean) => void;
-  setShowMd: (v: boolean) => void;
-  setShowOutlooks: (v: boolean) => void;
+  setLoopDepth: (depth: number) => void;
+  setTheme: (theme: ThemeKey) => void;
+  setFontSize: (size: FontSizeKey) => void;
+  setNoiseFloorDbz: (dbz: number) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -24,18 +24,17 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       homeLocation: null,
       colorTable: 'NWS_REF',
-      showAlerts: true,
-      showLsr: true,
-      showMd: true,
-      showOutlooks: false,
       loopDepth: 10,
+      theme: 'GREEN',
+      fontSize: 'M',
+      noiseFloorDbz: 0,
 
       setHomeLocation: (loc) => set({ homeLocation: loc }),
       setColorTable: (table) => set({ colorTable: table }),
-      setShowAlerts: (v) => set({ showAlerts: v }),
-      setShowLsr: (v) => set({ showLsr: v }),
-      setShowMd: (v) => set({ showMd: v }),
-      setShowOutlooks: (v) => set({ showOutlooks: v }),
+      setLoopDepth: (depth) => set({ loopDepth: depth }),
+      setTheme: (theme) => set({ theme }),
+      setFontSize: (size) => set({ fontSize: size }),
+      setNoiseFloorDbz: (dbz) => set({ noiseFloorDbz: dbz }),
     }),
     { name: 'nimbus-settings' }
   )

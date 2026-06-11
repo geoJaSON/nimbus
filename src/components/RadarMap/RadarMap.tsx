@@ -8,11 +8,15 @@ import { useScitStore } from '../../store/scitStore';
 import { useMcdStore } from '../../store/mcdStore';
 import { useMpingStore } from '../../store/mpingStore';
 import { useUIStore } from '../../store/uiStore';
+import { useSettingsStore } from '../../store/settingsStore';
 import { getProduct, buildWmsUrl } from '../../lib/radarProducts';
+import { ensureDbzFilterProtocol, filteredTileUrl } from '../../lib/radarFilter';
 import { alertColor, isWatch, isTornado, isSevere } from '../../lib/alertParsing';
 import { LSR_COLORS } from '../../lib/lsrParsing';
-import { MPING_COLORS } from '../../lib/mpingData';
+import { MPING_COLORS, MPING_ENABLED } from '../../lib/mpingData';
 import { dbzColor, cellRadius, projectPosition, isCellSevere } from '../../lib/scitData';
+
+ensureDbzFilterProtocol();
 
 const DARK_STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json';
 
@@ -42,8 +46,10 @@ export function RadarMap() {
   const [mapError, setMapError] = useState<string | null>(null);
   const [tornadoFlash, setTornadoFlash] = useState(true);
 
+  // Layer ids in frame order (for opacity sync) + the set of frame keys
+  // currently on the map (for diffing). Key = product|station|time.
   const frameLayerIds = useRef<string[]>([]);
-  const frameSourceIds = useRef<string[]>([]);
+  const frameKeys = useRef<Set<string>>(new Set());
 
   const station = useRadarStore((s) => s.station);
   const productCode = useRadarStore((s) => s.productCode);
@@ -75,6 +81,11 @@ export function RadarMap() {
 
   const mpingReports = useMpingStore((s) => s.reports);
   const showMping = useMpingStore((s) => s.showReports);
+  const toggleMping = useMpingStore((s) => s.toggleReports);
+
+  const homeLocation = useSettingsStore((s) => s.homeLocation);
+  const noiseFloorDbz = useSettingsStore((s) => s.noiseFloorDbz);
+  const homeMarker = useRef<maplibregl.Marker | null>(null);
 
   const openAlertPanel = useUIStore((s) => s.openAlertPanel);
   const setLsrPanelOpen = useUIStore((s) => s.setLsrPanelOpen);
@@ -600,6 +611,25 @@ export function RadarMap() {
     });
   }, [showCells, showMotion, mapReady]);
 
+  // ── Home location marker ──────────────────────────────────────────────────
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !mapReady) return;
+    homeMarker.current?.remove();
+    homeMarker.current = null;
+    if (!homeLocation) return;
+
+    const el = document.createElement('div');
+    el.className = 'home-marker';
+    el.textContent = '⌂';
+    el.title = 'Home';
+    homeMarker.current = new maplibregl.Marker({ element: el })
+      .setLngLat([homeLocation.lon, homeLocation.lat])
+      .addTo(m);
+
+    return () => { homeMarker.current?.remove(); homeMarker.current = null; };
+  }, [homeLocation, mapReady]);
+
   // ── Tornado warning flash ─────────────────────────────────────────────────
   useEffect(() => {
     const hasTornado = alerts.some((a) => isTornado(a.event) && a.polygon);
@@ -614,17 +644,18 @@ export function RadarMap() {
     m.setPaintProperty('alerts-tornado-outline', 'line-opacity', tornadoFlash ? 1 : 0.15);
   }, [tornadoFlash, mapReady]);
 
-  // ── Rebuild radar frame layers ────────────────────────────────────────────
-  // Only rebuild on loopFrames change (or initial mapReady). productCode and
-  // station changes flow through useRadarLoop, which refetches timestamps and
-  // calls setLoopFrames — that's what should drive the rebuild. Rebuilding
-  // earlier (on productCode alone) creates layers with the NEW product but
-  // OLD timestamps, which return invalid tiles and leave the layer stuck.
+  // ── Sync radar frame layers ───────────────────────────────────────────────
+  // Driven by loopFrames: useRadarLoop clears frames the moment the station
+  // or product changes (so the new product's latest scan shows immediately
+  // via a no-TIME frame), then replaces them when timestamps arrive. Layers
+  // are keyed by product|station|time and diffed, so a periodic refresh only
+  // adds/removes the frames that changed instead of tearing down the whole
+  // loop and refetching every tile.
   useEffect(() => {
     const m = map.current;
     if (!m || !mapReady) return;
-    rebuildFrameLayers(m);
-  }, [mapReady, loopFrames]);
+    syncFrameLayers(m);
+  }, [mapReady, loopFrames, noiseFloorDbz]);
 
   useEffect(() => {
     const m = map.current;
@@ -656,25 +687,44 @@ export function RadarMap() {
   }, [mapFocus, mapReady]);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  function clearFrameLayers(m: maplibregl.Map) {
-    frameLayerIds.current.forEach((id) => { if (m.getLayer(id)) m.removeLayer(id); });
-    frameSourceIds.current.forEach((id) => { if (m.getSource(id)) m.removeSource(id); });
-    frameLayerIds.current = [];
-    frameSourceIds.current = [];
-  }
-
-  function rebuildFrameLayers(m: maplibregl.Map) {
-    clearFrameLayers(m);
+  function syncFrameLayers(m: maplibregl.Map) {
     const product = getProduct(productCode);
     const stationId = station?.id ?? 'KHGX';
-    const frames = loopFrames.length > 0 ? loopFrames : [{ timestamp: null, scanAngle: 0.5 }];
+    // No timestamps yet → single no-TIME frame; GeoServer serves the latest scan.
+    const times: (string | undefined)[] =
+      loopFrames.length > 0
+        ? loopFrames.map((f) => f.timestamp.toISOString())
+        : [undefined];
     const activeIndex = loopFrames.length > 0 ? currentFrameIndex : 0;
 
-    frames.forEach((frame, i) => {
-      const time = frame.timestamp ? frame.timestamp.toISOString() : undefined;
-      const sourceId = `radar-src-${i}`;
-      const layerId = `radar-lyr-${i}`;
-      m.addSource(sourceId, { type: 'raster', tiles: [buildWmsUrl(product, stationId, time)], tileSize: 256 });
+    // Noise filter only applies to reflectivity-style products
+    const filterDbz = product.unit === 'dBZ' ? noiseFloorDbz : 0;
+
+    const desired = times.map((time) => ({
+      key: `${product.code}|${stationId}|${time ?? 'latest'}|f${filterDbz}`,
+      time,
+    }));
+    const desiredKeys = new Set(desired.map((d) => d.key));
+
+    // Drop frames that fell out of the loop (or belong to another product/station)
+    for (const key of [...frameKeys.current]) {
+      if (desiredKeys.has(key)) continue;
+      if (m.getLayer(`radar-lyr-${key}`)) m.removeLayer(`radar-lyr-${key}`);
+      if (m.getSource(`radar-src-${key}`)) m.removeSource(`radar-src-${key}`);
+      frameKeys.current.delete(key);
+    }
+
+    // Add frames that are new — on a periodic refresh that's typically one
+    // frame, so the rest of the loop keeps its already-loaded tiles.
+    for (const { key, time } of desired) {
+      const layerId = `radar-lyr-${key}`;
+      const sourceId = `radar-src-${key}`;
+      if (frameKeys.current.has(key) && m.getLayer(layerId)) continue;
+      if (!m.getSource(sourceId)) {
+        const rawUrl = buildWmsUrl(product, stationId, time);
+        const tileUrl = filterDbz > 0 ? filteredTileUrl(rawUrl, filterDbz) : rawUrl;
+        m.addSource(sourceId, { type: 'raster', tiles: [tileUrl], tileSize: 256 });
+      }
       // Insert radar tiles below all overlay layers (under SPC outlook)
       const beforeId = m.getLayer('spc-outlook-fill') ? 'spc-outlook-fill' : undefined;
       m.addLayer(
@@ -682,12 +732,16 @@ export function RadarMap() {
           id: layerId,
           type: 'raster',
           source: sourceId,
-          paint: { 'raster-opacity': i === activeIndex ? 0.85 : 0, 'raster-fade-duration': 0 },
+          paint: { 'raster-opacity': 0, 'raster-fade-duration': 0 },
         },
         beforeId,
       );
-      frameLayerIds.current.push(layerId);
-      frameSourceIds.current.push(sourceId);
+      frameKeys.current.add(key);
+    }
+
+    frameLayerIds.current = desired.map((d) => `radar-lyr-${d.key}`);
+    frameLayerIds.current.forEach((id, i) => {
+      if (m.getLayer(id)) m.setPaintProperty(id, 'raster-opacity', i === activeIndex ? 0.85 : 0);
     });
   }
 
@@ -729,6 +783,14 @@ export function RadarMap() {
         >
           LSR
         </button>
+        {MPING_ENABLED && (
+          <button
+            onClick={toggleMping}
+            className={`retro-btn text-xs px-2 py-0.5 ${showMping ? 'active' : ''}`}
+          >
+            MPING
+          </button>
+        )}
       </div>
 
       {mapError && (

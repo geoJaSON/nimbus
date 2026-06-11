@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Titlebar } from './components/Titlebar/Titlebar';
 import { RadarMap } from './components/RadarMap/RadarMap';
 import { ProductSelector } from './components/ProductSelector/ProductSelector';
@@ -8,8 +9,11 @@ import { LSRPanel } from './components/LSRPanel/LSRPanel';
 import { SCITPanel } from './components/SCITPanel/SCITPanel';
 import { MCDPanel } from './components/MCDPanel/MCDPanel';
 import { AboutModal } from './components/AboutModal/AboutModal';
+import { SettingsModal } from './components/SettingsModal/SettingsModal';
 import { StatusBar } from './components/shared/StatusBar';
 import { useUIStore } from './store/uiStore';
+import { useSettingsStore } from './store/settingsStore';
+import { applyTheme, applyFontSize } from './theme/themes';
 import { useNearestStation } from './hooks/useNearestStation';
 import { useRadarLoop } from './hooks/useRadarLoop';
 import { useAlertPolling } from './hooks/useAlertPolling';
@@ -17,7 +21,7 @@ import { useSpcData } from './hooks/useSpcData';
 import { useLsrFetch } from './hooks/useLsrFetch';
 import { useScitData } from './hooks/useScitData';
 import { useMcdData } from './hooks/useMcdData';
-// import { useMpingData } from './hooks/useMpingData'; // paused — OU feed requires auth
+import { useMpingData } from './hooks/useMpingData'; // no-op until VITE_MPING_TOKEN is set
 
 export default function App() {
   const stationPickerOpen = useUIStore((s) => s.stationPickerOpen);
@@ -26,12 +30,19 @@ export default function App() {
   const scitPanelOpen = useUIStore((s) => s.scitPanelOpen);
   const mcdPanelOpen = useUIStore((s) => s.mcdPanelOpen);
   const aboutModalOpen = useUIStore((s) => s.aboutModalOpen);
+  const settingsModalOpen = useUIStore((s) => s.settingsModalOpen);
   const setStationPickerOpen = useUIStore((s) => s.setStationPickerOpen);
   const setAlertPanelOpen = useUIStore((s) => s.setAlertPanelOpen);
   const setLsrPanelOpen = useUIStore((s) => s.setLsrPanelOpen);
   const setScitPanelOpen = useUIStore((s) => s.setScitPanelOpen);
   const setMcdPanelOpen = useUIStore((s) => s.setMcdPanelOpen);
   const setAboutModalOpen = useUIStore((s) => s.setAboutModalOpen);
+  const setSettingsModalOpen = useUIStore((s) => s.setSettingsModalOpen);
+
+  const theme = useSettingsStore((s) => s.theme);
+  const fontSize = useSettingsStore((s) => s.fontSize);
+  useEffect(() => applyTheme(theme), [theme]);
+  useEffect(() => applyFontSize(fontSize), [fontSize]);
 
   useNearestStation();
   useRadarLoop();
@@ -40,7 +51,7 @@ export default function App() {
   useLsrFetch();
   useScitData();
   useMcdData();
-  // useMpingData(); // paused — OU feed requires auth
+  useMpingData();
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-terminal text-phosphor font-mono">
@@ -72,6 +83,10 @@ export default function App() {
 
       {aboutModalOpen && (
         <AboutModal onClose={() => setAboutModalOpen(false)} />
+      )}
+
+      {settingsModalOpen && (
+        <SettingsModal onClose={() => setSettingsModalOpen(false)} />
       )}
     </div>
   );

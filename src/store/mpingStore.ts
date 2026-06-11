@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { MpingReport } from '../types';
 
 interface MpingState {
@@ -11,12 +12,20 @@ interface MpingState {
   toggleReports: () => void;
 }
 
-export const useMpingStore = create<MpingState>((set) => ({
-  reports: [],
-  fetchedAt: null,
-  showReports: true,
+export const useMpingStore = create<MpingState>()(
+  persist(
+    (set) => ({
+      reports: [],
+      fetchedAt: null,
+      showReports: true,
 
-  setReports: (reports, at) => set({ reports, fetchedAt: at }),
-  clearReports: () => set({ reports: [], fetchedAt: null }),
-  toggleReports: () => set((s) => ({ showReports: !s.showReports })),
-}));
+      setReports: (reports, at) => set({ reports, fetchedAt: at }),
+      clearReports: () => set({ reports: [], fetchedAt: null }),
+      toggleReports: () => set((s) => ({ showReports: !s.showReports })),
+    }),
+    {
+      name: 'nimbus-mping',
+      partialize: (s) => ({ showReports: s.showReports }),
+    }
+  )
+);

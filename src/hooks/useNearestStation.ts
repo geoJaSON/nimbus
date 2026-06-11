@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { findNearestStation } from '../lib/stationList';
+import { ipGeolocate } from '../lib/geolocate';
 import { useRadarStore } from '../store/radarStore';
 import { useSettingsStore } from '../store/settingsStore';
 
+// Picks an initial station for first launch. Station and home location both
+// persist, so this only does network work once per install.
 export function useNearestStation() {
   const station = useRadarStore((s) => s.station);
   const setStation = useRadarStore((s) => s.setStation);
@@ -13,31 +16,21 @@ export function useNearestStation() {
     if (station) return;
 
     if (homeLocation) {
-      const nearest = findNearestStation(homeLocation.lat, homeLocation.lon);
-      setStation(nearest);
+      setStation(findNearestStation(homeLocation.lat, homeLocation.lon));
       return;
     }
 
-    if (!navigator.geolocation) {
-      fallbackToDefault();
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setHomeLocation({ lat: latitude, lon: longitude });
-        const nearest = findNearestStation(latitude, longitude);
-        setStation(nearest);
-      },
-      () => fallbackToDefault(),
-      { timeout: 8000 }
-    );
-
-    function fallbackToDefault() {
-      // Default to Houston area (KHGX) if location unavailable
-      const nearest = findNearestStation(29.76, -95.37);
-      setStation(nearest);
-    }
+    let cancelled = false;
+    ipGeolocate().then((loc) => {
+      if (cancelled) return;
+      if (loc) {
+        setHomeLocation(loc);
+        setStation(findNearestStation(loc.lat, loc.lon));
+      } else {
+        // Default to Houston area (KHGX) if location unavailable
+        setStation(findNearestStation(29.76, -95.37));
+      }
+    });
+    return () => { cancelled = true; };
   }, []);
 }

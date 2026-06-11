@@ -63,6 +63,8 @@ export const ALERT_COLORS: Record<string, string> = {
   'Severe Thunderstorm Watch': '#ffaa00',
   'Flash Flood Warning': '#00ff00',
   'Flash Flood Watch': '#00cc00',
+  'Flood Watch': '#00cc00', // NWS retired "Flash Flood Watch" in 2021
+
   'Flash Flood Emergency': '#ff00ff',
   'Special Marine Warning': '#ffa500',
 };

@@ -4,14 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        phosphor: '#00ff41',
-        'phosphor-dim': '#00b32c',
-        'phosphor-dark': '#003a0f',
-        'phosphor-glow': '#33ff66',
+        // Phosphor family + borders are CSS variables so the UI theme
+        // (Settings → THEME) can swap them at runtime. Warn colors stay
+        // fixed — alert semantics shouldn't change with the theme.
+        phosphor: 'var(--phosphor)',
+        'phosphor-dim': 'var(--phosphor-dim)',
+        'phosphor-dark': 'var(--phosphor-dark)',
+        'phosphor-glow': 'var(--phosphor-glow)',
         terminal: '#000000',
         'terminal-surface': '#080808',
-        'terminal-border': '#1a4a1a',
-        'terminal-border-dim': '#0d2a0d',
+        'terminal-border': 'var(--terminal-border)',
+        'terminal-border-dim': 'var(--terminal-border-dim)',
         amber: '#ffb000',
         'amber-dim': '#c87800',
         'warn-tornado': '#ff0000',
@@ -23,8 +26,8 @@ export default {
         mono: ['"Share Tech Mono"', '"Courier New"', 'Courier', 'monospace'],
       },
       boxShadow: {
-        phosphor: '0 0 8px rgba(0,255,65,0.4)',
-        'phosphor-sm': '0 0 4px rgba(0,255,65,0.3)',
+        phosphor: '0 0 8px rgba(var(--phosphor-rgb), 0.4)',
+        'phosphor-sm': '0 0 4px rgba(var(--phosphor-rgb), 0.3)',
         amber: '0 0 8px rgba(255,176,0,0.4)',
       },
       animation: {

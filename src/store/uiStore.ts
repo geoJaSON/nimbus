@@ -16,6 +16,7 @@ interface UIState {
   scitPanelOpen: boolean;
   mcdPanelOpen: boolean;
   aboutModalOpen: boolean;
+  settingsModalOpen: boolean;
 
   mapFocus: MapFocus | null;
 
@@ -25,6 +26,7 @@ interface UIState {
   setScitPanelOpen: (open: boolean) => void;
   setMcdPanelOpen: (open: boolean) => void;
   setAboutModalOpen: (open: boolean) => void;
+  setSettingsModalOpen: (open: boolean) => void;
 
   toggleStationPicker: () => void;
   toggleAlertPanel: () => void;
@@ -46,6 +48,7 @@ export const useUIStore = create<UIState>((set) => ({
   scitPanelOpen: false,
   mcdPanelOpen: false,
   aboutModalOpen: false,
+  settingsModalOpen: false,
 
   mapFocus: null,
 
@@ -55,6 +58,7 @@ export const useUIStore = create<UIState>((set) => ({
   setScitPanelOpen: (open) => set({ scitPanelOpen: open }),
   setMcdPanelOpen: (open) => set({ mcdPanelOpen: open }),
   setAboutModalOpen: (open) => set({ aboutModalOpen: open }),
+  setSettingsModalOpen: (open) => set({ settingsModalOpen: open }),
 
   toggleStationPicker: () => set((s) => ({ stationPickerOpen: !s.stationPickerOpen })),
   toggleAlertPanel: () => set((s) => ({ alertPanelOpen: !s.alertPanelOpen })),

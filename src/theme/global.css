@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Theme variables — defaults match the GREEN phosphor theme. Swapped at
+   runtime by applyTheme()/applyFontSize() in src/theme/themes.ts. */
+:root {
+  --phosphor: #00ff41;
+  --phosphor-dim: #00b32c;
+  --phosphor-dark: #003a0f;
+  --phosphor-glow: #33ff66;
+  --terminal-border: #1a4a1a;
+  --terminal-border-dim: #0d2a0d;
+  --phosphor-rgb: 0, 255, 65;
+  --base-font: 13px;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -16,9 +29,9 @@
     padding: 0;
     overflow: hidden;
     background: #000;
-    color: #00ff41;
+    color: var(--phosphor);
     font-family: 'Share Tech Mono', 'Courier New', Courier, monospace;
-    font-size: 13px;
+    font-size: var(--base-font);
     line-height: 1.45;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -35,39 +48,39 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #1a4a1a;
+    background: var(--terminal-border);
     border-radius: 0;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #00b32c;
+    background: var(--phosphor-dim);
   }
 
   ::selection {
-    background: #003a0f;
-    color: #00ff41;
+    background: var(--phosphor-dark);
+    color: var(--phosphor);
   }
 }
 
 @layer components {
   .crt-glow {
-    text-shadow: 0 0 6px rgba(0, 255, 65, 0.6);
+    text-shadow: 0 0 6px rgba(var(--phosphor-rgb), 0.6);
   }
 
   .crt-border {
-    border: 1px solid #1a4a1a;
-    box-shadow: inset 0 0 8px rgba(0, 255, 65, 0.05);
+    border: 1px solid var(--terminal-border);
+    box-shadow: inset 0 0 8px rgba(var(--phosphor-rgb), 0.05);
   }
 
   .panel-header {
     @apply px-3 py-1.5 text-xs tracking-widest uppercase border-b border-terminal-border;
-    color: #00b32c;
+    color: var(--phosphor-dim);
     letter-spacing: 0.12em;
   }
 
   .retro-btn {
     @apply px-3 py-1 text-xs tracking-wider uppercase border border-terminal-border;
-    color: #00b32c;
+    color: var(--phosphor-dim);
     background: transparent;
     cursor: pointer;
     transition: all 0.1s;
@@ -76,18 +89,18 @@
 
   .retro-btn:hover {
     @apply border-phosphor;
-    color: #00ff41;
-    box-shadow: 0 0 6px rgba(0, 255, 65, 0.3);
+    color: var(--phosphor);
+    box-shadow: 0 0 6px rgba(var(--phosphor-rgb), 0.3);
   }
 
   .retro-btn:active {
-    background: #003a0f;
+    background: var(--phosphor-dark);
   }
 
   .retro-btn.active {
     @apply border-phosphor bg-phosphor-dark;
-    color: #00ff41;
-    box-shadow: 0 0 6px rgba(0, 255, 65, 0.3);
+    color: var(--phosphor);
+    box-shadow: 0 0 6px rgba(var(--phosphor-rgb), 0.3);
   }
 
   .retro-btn.danger {
@@ -112,32 +125,32 @@
 /* Terminal-themed popup */
 .maplibregl-popup-content {
   background: #060606 !important;
-  border: 1px solid #1a4a1a !important;
+  border: 1px solid var(--terminal-border) !important;
   border-radius: 0 !important;
-  box-shadow: 0 0 12px rgba(0, 255, 65, 0.15) !important;
+  box-shadow: 0 0 12px rgba(var(--phosphor-rgb), 0.15) !important;
   padding: 6px 10px !important;
   font-family: 'Share Tech Mono', 'Courier New', monospace !important;
   font-size: 11px !important;
-  color: #00ff41 !important;
+  color: var(--phosphor) !important;
   min-width: 140px;
 }
 
 .maplibregl-popup-tip {
-  border-top-color: #1a4a1a !important;
-  border-bottom-color: #1a4a1a !important;
-  border-left-color: #1a4a1a !important;
-  border-right-color: #1a4a1a !important;
+  border-top-color: var(--terminal-border) !important;
+  border-bottom-color: var(--terminal-border) !important;
+  border-left-color: var(--terminal-border) !important;
+  border-right-color: var(--terminal-border) !important;
 }
 
 .maplibregl-popup-close-button {
-  color: #00b32c !important;
+  color: var(--phosphor-dim) !important;
   font-size: 14px !important;
   padding: 0 6px !important;
   background: transparent !important;
 }
 
 .maplibregl-popup-close-button:hover {
-  color: #00ff41 !important;
+  color: var(--phosphor) !important;
   background: transparent !important;
 }
 
@@ -149,7 +162,7 @@
 }
 
 .terminal-popup-meta {
-  color: #00b32c;
+  color: var(--phosphor-dim);
   margin-top: 2px;
 }
 
@@ -166,14 +179,24 @@
 }
 
 .scit-hover-row > span:first-child {
-  color: #00b32c;
+  color: var(--phosphor-dim);
 }
 
 .scit-hover-row > span:last-child {
-  color: #00ff41;
+  color: var(--phosphor);
 }
 
 .scit-hover-row.scit-hover-warn > span {
   color: #ff4444;
   font-weight: bold;
+}
+
+/* Home location marker */
+.home-marker {
+  color: var(--phosphor);
+  font-size: 18px;
+  line-height: 1;
+  text-shadow: 0 0 6px rgba(var(--phosphor-rgb), 0.8);
+  pointer-events: none;
+  user-select: none;
 }

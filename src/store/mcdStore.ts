@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { MesoscaleDiscussion } from '../types';
 
 interface McdState {
@@ -12,13 +13,21 @@ interface McdState {
   toggleMcds: () => void;
 }
 
-export const useMcdStore = create<McdState>((set) => ({
-  mcds: [],
-  fetchedAt: null,
-  selectedMcdNum: null,
-  showMcds: true,
+export const useMcdStore = create<McdState>()(
+  persist(
+    (set) => ({
+      mcds: [],
+      fetchedAt: null,
+      selectedMcdNum: null,
+      showMcds: true,
 
-  setMcds: (mcds, at) => set({ mcds, fetchedAt: at }),
-  selectMcd: (num) => set({ selectedMcdNum: num }),
-  toggleMcds: () => set((s) => ({ showMcds: !s.showMcds })),
-}));
+      setMcds: (mcds, at) => set({ mcds, fetchedAt: at }),
+      selectMcd: (num) => set({ selectedMcdNum: num }),
+      toggleMcds: () => set((s) => ({ showMcds: !s.showMcds })),
+    }),
+    {
+      name: 'nimbus-mcd',
+      partialize: (s) => ({ showMcds: s.showMcds }),
+    }
+  )
+);

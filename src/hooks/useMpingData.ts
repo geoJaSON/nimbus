@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useRadarStore } from '../store/radarStore';
 import { useMpingStore } from '../store/mpingStore';
-import { fetchMpingReports, filterMpingForStation } from '../lib/mpingData';
+import { fetchMpingReports, filterMpingForStation, MPING_ENABLED } from '../lib/mpingData';
 
 const REFRESH_MS = 2 * 60 * 1000;
 
@@ -12,7 +12,7 @@ export function useMpingData() {
 
   useEffect(() => {
     clearReports();
-    if (!station) return;
+    if (!MPING_ENABLED || !station) return;
 
     const controller = new AbortController();
 

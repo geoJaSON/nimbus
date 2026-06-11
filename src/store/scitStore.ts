@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { StormCell } from '../types';
 
 interface ScitState {
@@ -15,16 +16,24 @@ interface ScitState {
   toggleMotion: () => void;
 }
 
-export const useScitStore = create<ScitState>((set) => ({
-  cells: [],
-  fetchedAt: null,
-  selectedCellId: null,
-  showCells: true,
-  showMotion: true,
+export const useScitStore = create<ScitState>()(
+  persist(
+    (set) => ({
+      cells: [],
+      fetchedAt: null,
+      selectedCellId: null,
+      showCells: true,
+      showMotion: true,
 
-  setCells: (cells, at) => set({ cells, fetchedAt: at }),
-  clearCells: () => set({ cells: [], fetchedAt: null, selectedCellId: null }),
-  selectCell: (id) => set({ selectedCellId: id }),
-  toggleCells: () => set((s) => ({ showCells: !s.showCells })),
-  toggleMotion: () => set((s) => ({ showMotion: !s.showMotion })),
-}));
+      setCells: (cells, at) => set({ cells, fetchedAt: at }),
+      clearCells: () => set({ cells: [], fetchedAt: null, selectedCellId: null }),
+      selectCell: (id) => set({ selectedCellId: id }),
+      toggleCells: () => set((s) => ({ showCells: !s.showCells })),
+      toggleMotion: () => set((s) => ({ showMotion: !s.showMotion })),
+    }),
+    {
+      name: 'nimbus-scit',
+      partialize: (s) => ({ showCells: s.showCells, showMotion: s.showMotion }),
+    }
+  )
+);

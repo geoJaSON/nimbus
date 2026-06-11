@@ -3,9 +3,25 @@ import { useAlertStore } from '../store/alertStore';
 import { parseNWSAlerts } from '../lib/alertParsing';
 
 const POLL_INTERVAL_MS = 60_000;
+
+// Only request the convective/flood/marine events the app actually styles and
+// filters on. Without this the API returns every active alert in the US
+// (winter, heat, air quality, marine forecasts…) — routinely hundreds of
+// features and several MB per poll.
+const ALERT_EVENTS = [
+  'Tornado Warning',
+  'Tornado Watch',
+  'Severe Thunderstorm Warning',
+  'Severe Thunderstorm Watch',
+  'Flash Flood Warning',
+  'Flood Watch',
+  'Special Marine Warning',
+  'Extreme Wind Warning',
+];
 const NWS_ALERTS_URL =
-  'https://api.weather.gov/alerts/active?status=actual&message_type=alert';
-const USER_AGENT = 'nimbus-weather-radar/0.1 (jasjordan@proton.me)';
+  'https://api.weather.gov/alerts/active?status=actual&message_type=alert' +
+  `&event=${encodeURIComponent(ALERT_EVENTS.join(','))}`;
+const USER_AGENT = 'nimbus-weather-radar/1.0 (jasjordan@proton.me)';
 
 export function useAlertPolling() {
   const setAlerts = useAlertStore((s) => s.setAlerts);

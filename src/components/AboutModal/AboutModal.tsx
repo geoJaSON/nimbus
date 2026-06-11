@@ -1,16 +1,15 @@
 import { useEffect } from 'react';
+import { APP_VERSION } from '../../lib/version';
 
 interface AboutModalProps {
   onClose: () => void;
 }
 
-const VERSION = '1.0.0';
-
 const DATA_SOURCES = [
-  { name: 'NWS API', url: 'https://api.weather.gov', detail: 'Watches, warnings, advisories, LSR products' },
+  { name: 'NWS API', url: 'https://api.weather.gov', detail: 'Watches, warnings, advisories' },
   { name: 'NOAA NCEP GeoServer', url: 'https://opengeo.ncep.noaa.gov', detail: 'Radar tiles (WMS): Super-Res REF/VEL, HCA, CONUS mosaics' },
   { name: 'NOAA SPC', url: 'https://www.spc.noaa.gov', detail: 'Day 1 convective outlook, mesoscale discussions' },
-  { name: 'IEM (Iowa State)', url: 'https://mesonet.agron.iastate.edu', detail: 'SCIT storm-cell attributes (NEXRAD Level III)' },
+  { name: 'IEM (Iowa State)', url: 'https://mesonet.agron.iastate.edu', detail: 'SCIT storm-cell attributes, local storm reports, MCD index' },
   { name: 'OU / NSSL mPING', url: 'https://mping.ou.edu', detail: 'Crowdsourced weather reports (v1.1 — pending API key)' },
 ];
 
@@ -54,7 +53,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
           <div>
             <div className="crt-glow text-phosphor font-bold tracking-[0.25em] text-base">NIMBUS</div>
             <div className="text-phosphor-dim mt-1">Retro terminal NEXRAD weather radar</div>
-            <div className="text-phosphor-dim mt-0.5 tabular-nums">v{VERSION}</div>
+            <div className="text-phosphor-dim mt-0.5 tabular-nums">v{APP_VERSION}</div>
           </div>
 
           <div>
